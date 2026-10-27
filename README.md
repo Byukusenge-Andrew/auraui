@@ -1,15 +1,18 @@
-# AuraUI 🌟
+<div align="center">
+  <img src="assets/logo.svg" alt="AuraUI Logo" width="88" height="88" />
+  <h1>AuraUI</h1>
+  <p><strong>The Modern, Lightweight C++ Desktop Framework with Standard HTML/CSS Styling</strong></p>
 
-[![CI](https://github.com/Byukusenge-Andrew/auraui/actions/workflows/ci.yml/badge.svg)](https://github.com/Byukusenge-Andrew/auraui/actions/workflows/ci.yml)
-[![Documentation](https://img.shields.io/badge/Docs-GitHub%20Pages-27272a.svg)](https://byukusenge-andrew.github.io/auraui/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-27272a.svg)](LICENSE)
+  <a href="https://github.com/Byukusenge-Andrew/auraui/actions/workflows/ci.yml"><img src="https://github.com/Byukusenge-Andrew/auraui/actions/workflows/ci.yml/badge.svg" alt="CI Status" /></a>
+  <a href="https://byukusenge-andrew.github.io/auraui/"><img src="https://img.shields.io/badge/Docs-GitHub%20Pages-27272a.svg" alt="Documentation" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-27272a.svg" alt="License: MIT" /></a>
 
-> **The Modern, Lightweight C++ Desktop Framework with Standard HTML/CSS Styling**
+  <p>
+    📖 <a href="docs/USER_GUIDE.md"><strong>Full User Guide & Developer Manual</strong></a> | 🛡️ <a href="SECURITY_AUDIT.md"><strong>Security Audit Report</strong></a>
+  </p>
+</div>
 
-📖 **[Full User Guide & Developer Manual](file:///d:/tradegraph/docs/USER_GUIDE.md)** | 🛡️ **[Security Audit Report](file:///d:/tradegraph/SECURITY_AUDIT.md)**
-
-
-AuraUI bridges the gap between **high-performance C++20 business logic** and the **speed and aesthetic power of modern HTML5/CSS3**. Build desktop apps with custom frameless title bars, glassmorphic dark-mode aesthetics, and responsive layouts, all compiling to a **single standalone Windows executable (~450 KB)** with zero external dependencies.
+AuraUI bridges the gap between **high-performance C++20 business logic** and the **speed and aesthetic power of modern HTML5/CSS3**. Build desktop apps with custom frameless title bars, sleek dark-mode aesthetics, and responsive layouts, all compiling to a **single standalone Windows executable (~450 KB)** with zero external dependencies.
 
 ---
 
