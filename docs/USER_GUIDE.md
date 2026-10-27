@@ -215,18 +215,18 @@ AuraUI uses an intuitive callback syntax inspired by Express.js:
 app.bind("calculate_sum", [](const auraui::Context& ctx) {
     int a = ctx.get<int>("a", 0);
     int b = ctx.get<int>("b", 0);
-    ctx.json({{"sum", a + b}});
+    ctx.json({ {"sum", a + b} });
 });
 
 // REST-style aliases
 app.get("/api/user", [](const auraui::Context& ctx) {
-    ctx.json({{"name", "Alice"}, {"role", "Admin"}});
+    ctx.json({ {"name", "Alice"}, {"role", "Admin"} });
 });
 
 app.post("/api/settings", [](const auraui::Context& ctx) {
     std::string theme = ctx.get<std::string>("theme", "dark");
     // Persist settings...
-    ctx.json({{"success", true}});
+    ctx.json({ {"success", true} });
 });
 ```
 
@@ -520,8 +520,8 @@ Override these CSS variables in your `ui/style.css` to customize the palette:
     --bg-secondary: #12161f;
     --bg-card: rgba(22, 27, 34, 0.65);
     --border-glass: rgba(255, 255, 255, 0.08);
-    --accent-primary: #6366f1;   /* Indigo */
-    --accent-secondary: #06b6d4; /* Cyan */
+    --accent-primary: #38bdf8;   /* Cyan */
+    --accent-secondary: #34d399; /* Mint */
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
 }
@@ -573,7 +573,7 @@ app.bind("compute_heavy_task", [&app](const auraui::Context& ctx) {
     }).detach();
 
     // Acknowledge immediate start
-    ctx.json({{"status", "started"}});
+    ctx.json({ {"status", "started"} });
 });
 ```
 
