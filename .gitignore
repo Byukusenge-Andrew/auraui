@@ -1,0 +1,41 @@
+# AuraUI Build & Intermediate Artifacts
+dist/
+build/
+build_dev/
+**/vfs.h
+*.exe
+*.obj
+*.exp
+*.pdb
+*.ilk
+*.idb
+
+# Static libraries (keep auraui bundled prebuilt lib)
+*.lib
+!auraui/lib/*.lib
+
+# Temporary sample app (created during testing)
+sample-app/
+
+# Upstream vendor submodule/checkout (auraui is self-contained in auraui/include and auraui/lib)
+vendor/
+
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDE & Editor files
+.vs/
+.vscode/
+*.user
+*.suo
+.idea/
+
+# OS generated
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Local state
+.necropet.json

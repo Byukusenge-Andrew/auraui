@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuraUI Desktop Showcase</title>
+    <script src="webui.js"></script>
+    <link rel="stylesheet" href="aura.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="aura.js"></script>
+</head>
+<body>
+    <!-- Custom Draggable Title Bar -->
+    <header class="aura-titlebar">
+        <div class="aura-titlebar-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="url(#logo-grad)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <defs>
+                    <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#6366f1"/>
+                        <stop offset="100%" stop-color="#06b6d4"/>
+                    </linearGradient>
+                </defs>
+                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                <polyline points="2 17 12 22 22 17"></polyline>
+                <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+            <span>AuraUI Showcase</span>
+            <span class="aura-badge aura-badge-success" style="font-size: 10.5px; padding: 2px 8px;">C++ 20</span>
+        </div>
+        <div class="aura-titlebar-controls">
+            <button id="aura-win-min" class="aura-win-btn" title="Minimize">−</button>
+            <button id="aura-win-max" class="aura-win-btn" title="Maximize">□</button>
+            <button id="aura-win-close" class="aura-win-btn close" title="Close">✕</button>
+        </div>
+    </header>
+
+    <!-- Main Application Shell -->
+    <div class="aura-app-shell">
+        <!-- Sidebar Navigation -->
+        <aside class="aura-sidebar">
+            <div class="sidebar-header">
+                <span class="brand-sub">DESKTOP FRAMEWORK</span>
+                <span class="brand-title">Native C++ & Web UI</span>
+            </div>
+
+            <nav class="nav-links">
+                <a class="aura-nav-item active" data-tab="tab-dashboard">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="9"/>
+                        <rect x="14" y="3" width="7" height="5"/>
+                        <rect x="14" y="12" width="7" height="9"/>
+                        <rect x="3" y="16" width="7" height="5"/>
+                    </svg>
+                    <span>System Telemetry</span>
+                </a>
+                <a class="aura-nav-item" data-tab="tab-benchmark">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                    </svg>
+                    <span>C++ Benchmark</span>
+                </a>
+                <a class="aura-nav-item" data-tab="tab-dialogs">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    <span>Win32 Dialogs</span>
+                </a>
+                <a class="aura-nav-item" data-tab="tab-text">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="4 7 4 4 20 4 20 7"/>
+                        <line x1="9" y1="20" x2="15" y2="20"/>
+                        <line x1="12" y1="4" x2="12" y2="20"/>
+                    </svg>
+                    <span>C++ String Engine</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="status-pill">
+                    <span class="pulse-indicator"></span>
+                    <span>Native Thread Active</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="aura-main-content">
+            <!-- Tab 1: System Telemetry -->
+            <div id="tab-dashboard" class="tab-pane active">
+                <div class="section-header">
+                    <div>
+                        <h2>System Telemetry</h2>
+                        <p class="section-desc">Queried via native Win32 APIs in C++ and rendered through modern HTML/CSS.</p>
+                    </div>
+                    <button id="btn-refresh-telemetry" class="aura-btn aura-btn-secondary">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 4 23 10 17 10"/>
+                            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                        </svg>
+                        Refresh
+                    </button>
+                </div>
+
+                <div class="aura-grid-stats">
+                    <div class="aura-stat-card">
+                        <span class="aura-stat-label">Operating System</span>
+                        <span id="stat-os" class="aura-stat-value">Windows</span>
+                    </div>
+                    <div class="aura-stat-card">
+                        <span class="aura-stat-label">CPU Cores</span>
+                        <span id="stat-cores" class="aura-stat-value">--</span>
+                    </div>
+                    <div class="aura-stat-card">
+                        <span class="aura-stat-label">RAM Utilization</span>
+                        <span id="stat-ram-pct" class="aura-stat-value">--%</span>
+                    </div>
+                    <div class="aura-stat-card">
+                        <span class="aura-stat-label">Available RAM</span>
+                        <span id="stat-ram-avail" class="aura-stat-value">-- GB</span>
+                    </div>
+                </div>
+
+                <div class="aura-card" style="margin-top: 20px;">
+                    <div class="aura-card-header">
+                        <span class="aura-card-title">Memory Allocation Status</span>
+                        <span id="ram-badge" class="aura-badge aura-badge-success">Optimal</span>
+                    </div>
+                    <div class="aura-progress" style="margin-bottom: 12px;">
+                        <div id="ram-progress-bar" class="aura-progress-bar" style="width: 0%;"></div>
+                    </div>
+                    <div class="telemetry-details">
+                        <span>Host: <strong id="stat-host">--</strong></span>
+                        <span>Total Installed: <strong id="stat-ram-total">-- GB</strong></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: C++ Benchmark -->
+            <div id="tab-benchmark" class="tab-pane">
+                <div class="section-header">
+                    <div>
+                        <h2>Multi-Threaded C++ Benchmark</h2>
+                        <p class="section-desc">Executes parallel prime number calculations using <code>std::async</code> in C++.</p>
+                    </div>
+                </div>
+
+                <div class="aura-card">
+                    <div class="benchmark-controls">
+                        <div>
+                            <label class="control-label">Search Range (1 to N):</label>
+                            <input type="number" id="bench-limit" class="aura-input" value="3000000" step="500000">
+                        </div>
+                        <div>
+                            <label class="control-label">Worker Threads:</label>
+                            <select id="bench-threads" class="aura-input">
+                                <option value="1">1 Thread</option>
+                                <option value="2">2 Threads</option>
+                                <option value="4" selected>4 Threads</option>
+                                <option value="8">8 Threads</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="control-label">&nbsp;</label>
+                            <button id="btn-run-benchmark" class="aura-btn aura-btn-primary" style="width: 100%;">
+                                Start C++ Benchmark
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="benchmark-results" class="bench-results-box" style="display: none;">
+                        <div class="result-row">
+                            <span>Primes Identified:</span>
+                            <strong id="res-primes">--</strong>
+                        </div>
+                        <div class="result-row">
+                            <span>Execution Time:</span>
+                            <strong id="res-time" class="highlight-number">-- ms</strong>
+                        </div>
+                        <div class="result-row">
+                            <span>Speed:</span>
+                            <strong id="res-speed">-- primes/sec</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 3: Win32 Dialogs -->
+            <div id="tab-dialogs" class="tab-pane">
+                <div class="section-header">
+                    <div>
+                        <h2>Native Win32 File Dialogs</h2>
+                        <p class="section-desc">Open and Save native OS file pickers without external dependencies.</p>
+                    </div>
+                </div>
+
+                <div class="aura-card">
+                    <div class="dialog-actions">
+                        <button id="btn-open-file" class="aura-btn aura-btn-secondary">
+                            📁 Browse File...
+                        </button>
+                        <button id="btn-save-file" class="aura-btn aura-btn-secondary">
+                            💾 Save File As...
+                        </button>
+                    </div>
+                    <div class="dialog-output" id="dialog-output">
+                        No dialog action selected.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 4: C++ String Processing -->
+            <div id="tab-text" class="tab-pane">
+                <div class="section-header">
+                    <div>
+                        <h2>C++ String & Data Engine</h2>
+                        <p class="section-desc">Type below to see live processing in native C++.</p>
+                    </div>
+                </div>
+
+                <div class="aura-card">
+                    <textarea id="text-input" class="aura-input" rows="4" placeholder="Type text here to process in C++...">AuraUI delivers modern desktop styling with the full power and speed of native C++.</textarea>
+                    
+                    <div class="text-stats-grid" style="margin-top: 16px;">
+                        <div class="stat-small">
+                            <span>Characters</span>
+                            <strong id="text-chars">--</strong>
+                        </div>
+                        <div class="stat-small">
+                            <span>Words</span>
+                            <strong id="text-words">--</strong>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 16px;">
+                        <span class="control-label">Reversed in C++:</span>
+                        <div id="text-reversed" class="code-box">--</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

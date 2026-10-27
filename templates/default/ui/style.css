@@ -1,0 +1,52 @@
+/* App Specific Custom Styles */
+
+.hero-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.gradient-text {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 14.5px;
+}
+
+.calc-grid {
+    display: grid;
+    grid-template-columns: 1fr 80px 1fr auto;
+    gap: 12px;
+    align-items: center;
+}
+
+.select-op {
+    text-align: center;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.result-banner {
+    margin-top: 16px;
+    padding: 14px 18px;
+    border-radius: var(--radius-md);
+    background: rgba(99, 102, 241, 0.08);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    font-size: 15px;
+    color: var(--text-primary);
+}
+
+.result-banner strong {
+    color: #818cf8;
+    font-family: var(--font-mono);
+    font-size: 18px;
+    margin-left: 6px;
+}
