@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AuraUI Documentation | Modern C++ Desktop Framework</title>
+  <meta name="description" content="Official documentation and developer manual for AuraUI - The ultra-lightweight C++20 desktop framework with standard HTML5/CSS3 frontend and standalone 480 KB binaries.">
+  <meta name="keywords" content="AuraUI, C++ Desktop Framework, Webview, HTML CSS Desktop, C++20, Windows GUI, WebUI">
+  <meta name="theme-color" content="#07090e">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="AuraUI Documentation | Modern C++ Desktop Framework">
+  <meta property="og:description" content="Build lightweight C++20 desktop apps with standard HTML/CSS. Standalone ~480 KB executables with zero dependencies.">
+  <meta property="og:type" content="website">
+
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Sticky Header -->
+  <header class="site-header">
+    <div class="brand-wrapper">
+      <button class="mobile-menu-btn" aria-label="Toggle navigation">☰</button>
+      <a href="#" class="brand-logo">
+        <span class="brand-icon">⚡</span>
+        <span>AuraUI</span>
+      </a>
+      <span class="brand-badge">v1.0.0</span>
+    </div>
+
+    <div class="header-search">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="search-docs" class="search-input" placeholder="Search documentation...">
+    </div>
+
+    <nav class="header-nav">
+      <a href="#quickstart" class="header-link">Quick Start</a>
+      <a href="#cpp-api" class="header-link">C++ API</a>
+      <a href="#js-api" class="header-link">JS Bridge</a>
+      <a href="#security" class="header-link">Security</a>
+      <a href="https://github.com/Byukusenge-Andrew/auraui" target="_blank" rel="noopener" class="btn-github">
+        <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+        </svg>
+        GitHub
+      </a>
+    </nav>
+  </header>
+
+  <!-- Docs Layout: Sidebar & Content -->
+  <div class="docs-layout">
+    
+    <!-- Sticky Sidebar Navigation -->
+    <aside class="docs-sidebar">
+      <div class="nav-group">
+        <div class="nav-group-title">Getting Started</div>
+        <ul class="nav-links">
+          <li><a href="#introduction" class="nav-link active">Introduction</a></li>
+          <li><a href="#architecture" class="nav-link">Architecture</a></li>
+          <li><a href="#prerequisites" class="nav-link">Prerequisites</a></li>
+          <li><a href="#quickstart" class="nav-link">Quick Start</a></li>
+          <li><a href="#directory-structure" class="nav-link">Project Structure</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-title">CLI Toolchain</div>
+        <ul class="nav-links">
+          <li><a href="#cli-new" class="nav-link">auraui new</a></li>
+          <li><a href="#cli-dev" class="nav-link">auraui dev</a></li>
+          <li><a href="#cli-build" class="nav-link">auraui build</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-title">C++ Backend API</div>
+        <ul class="nav-links">
+          <li><a href="#cpp-app" class="nav-link">auraui::App Window</a></li>
+          <li><a href="#cpp-routes" class="nav-link">Express-Style Routes</a></li>
+          <li><a href="#cpp-context" class="nav-link">Request Context & JSON</a></li>
+          <li><a href="#cpp-events" class="nav-link">Event Dispatch (emit)</a></li>
+          <li><a href="#cpp-dialogs" class="nav-link">Native Dialogs & Shell</a></li>
+          <li><a href="#cpp-clipboard" class="nav-link">Unicode Clipboard</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-title">Frontend JS Bridge</div>
+        <ul class="nav-links">
+          <li><a href="#js-call" class="nav-link">aura.call()</a></li>
+          <li><a href="#js-events" class="nav-link">aura.on() & Events</a></li>
+          <li><a href="#js-router" class="nav-link">SPA Router (aura.router)</a></li>
+          <li><a href="#js-store" class="nav-link">Persistent Storage</a></li>
+          <li><a href="#js-window" class="nav-link">Frameless Window Controls</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-title">Design System</div>
+        <ul class="nav-links">
+          <li><a href="#design-system" class="nav-link">Aura.css Tokens</a></li>
+          <li><a href="#design-titlebar" class="nav-link">Frameless Titlebar</a></li>
+          <li><a href="#interactive-preview" class="nav-link">Interactive Component Demo</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-title">Production & Security</div>
+        <ul class="nav-links">
+          <li><a href="#multithreading" class="nav-link">Async Multi-Threading</a></li>
+          <li><a href="#security" class="nav-link">Security & Hardening</a></li>
+          <li><a href="#troubleshooting" class="nav-link">Troubleshooting & FAQ</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Main Content Stream -->
+    <main class="docs-content">
+      
+      <!-- Hero Banner -->
+      <section class="docs-hero">
+        <h1 class="hero-title">AuraUI Developer Manual</h1>
+        <p class="hero-subtitle">
+          The high-performance, lightweight C++20 desktop framework with standard HTML5/CSS3 frontends and single-binary packaging.
+        </p>
+        <div class="hero-badges">
+          <span class="pill-badge cyan">⚡ ~480 KB Standalone Binary</span>
+          <span class="pill-badge indigo">🛡️ Hardened & Audited IPC</span>
+          <span class="pill-badge emerald">🚀 Zero External DLLs</span>
+          <span class="pill-badge">💎 Pure C++20 Engine</span>
+        </div>
+      </section>
+
+      <!-- Section: Introduction -->
+      <section id="introduction">
+        <h2>⚡ Introduction</h2>
+        <p>
+          <strong>AuraUI</strong> eliminates the bloat of traditional web-based desktop runtimes. While Electron applications bundle a full Chromium browser and Node.js environment exceeding 150 MB, AuraUI links your C++20 business logic directly with the native operating system webview engine (Evergreen WebView2 on Windows).
+        </p>
+        <p>
+          At build time, all HTML, CSS, JavaScript, SVG, and font assets are embedded directly into your C++ binary as an in-memory Virtual File System (VFS), emitting a <strong>single, self-contained <code>.exe</code></strong> that launches instantly without any installers or runtime dependencies.
+        </p>
+      </section>
+
+      <!-- Section: Architecture -->
+      <section id="architecture">
+        <h2>🏗️ Architecture</h2>
+        <p>
+          Communication between the native C++ engine and the webview interface happens over a bidirectional, type-safe IPC channel:
+        </p>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-lang-tag">ARCHITECTURE OVERVIEW</span>
+          </div>
+          <pre><code>+-------------------------------------------------------------+
+|             Frontend (HTML5, Modern CSS, ES6 JS)            |
+|       aura.call("calc", data)  &lt;--&gt;  aura.on("event", fn)   |
++-------------------------------------------------------------+
+                              ↕ [Encrypted IPC WebSocket / Pipe]
++-------------------------------------------------------------+
+|         Native AuraUI Bridge &amp; In-Memory VFS (vfs.h)         |
++-------------------------------------------------------------+
+                              ↕ [Type-Safe nlohmann::json]
++-------------------------------------------------------------+
+|             Backend: Pure C++20 Engine (auraui.hpp)         |
+|         app.bind()  |  app.emit()  |  Win32 System API      |
++-------------------------------------------------------------+</code></pre>
+        </div>
+      </section>
+
+      <!-- Section: Prerequisites -->
+      <section id="prerequisites">
+        <h2>🛠️ Prerequisites &amp; Setup</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Requirement</th>
+                <th>Version</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Operating System</strong></td>
+                <td>Windows 10 / 11 (x64)</td>
+                <td>Ships with Evergreen WebView2 Runtime pre-installed.</td>
+              </tr>
+              <tr>
+                <td><strong>C++ Compiler</strong></td>
+                <td>MSVC 2022 (v143)</td>
+                <td>C++20 enabled (<code>/std:c++20 /O2 /MD /EHsc</code>).</td>
+              </tr>
+              <tr>
+                <td><strong>Python</strong></td>
+                <td>3.10 or newer</td>
+                <td>Powers the CLI asset bundler and build automation.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section: Quick Start -->
+      <section id="quickstart">
+        <h2>⚡ Quick Start</h2>
+        <p>Scaffold, run, and compile your first AuraUI desktop application in 4 commands:</p>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-lang-tag">POWERSHELL</span>
+            <button class="btn-copy">Copy</button>
+          </div>
+          <pre><code><span class="hl-com"># 1. Scaffold a new desktop app</span>
+auraui new my-calculator
+
+<span class="hl-com"># 2. Enter project folder</span>
+cd my-calculator
+
+<span class="hl-com"># 3. Live development with instant hot-reload</span>
+auraui dev
+
+<span class="hl-com"># 4. Compile into a standalone release executable</span>
+auraui build</code></pre>
+        </div>
+
+        <div class="alert-callout tip">
+          <div class="alert-title">💡 Instant Hot-Reload</div>
+          <p>In development mode (<code>auraui dev</code>), editing any file in <code>ui/index.html</code>, <code>ui/style.css</code>, or <code>ui/app.js</code> updates live in the window upon refresh (<code>Ctrl + R</code> or <code>F5</code>) without needing C++ recompilation.</p>
+        </div>
+      </section>
+
+      <!-- Section: Project Structure -->
+      <section id="directory-structure">
+        <h2>📁 Project Directory Structure</h2>
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-lang-tag">DIRECTORY TREE</span>
+          </div>
+          <pre><code>my-calculator/
+├── auraui.json            # Project configuration (title, dimensions, settings)
+├── dist/                  # Production builds (created by auraui build)
+│   └── my-calculator.exe  # ~480 KB standalone release executable
+├── src/
+│   ├── main.cpp           # C++ business logic and endpoint handlers
+│   └── vfs.h              # Auto-generated virtual file system (build time)
+└── ui/
+    ├── index.html         # Application markup and view containers
+    ├── style.css          # Custom user styles
+    ├── app.js             # Application JavaScript logic
+    ├── aura.css           # Glassmorphic dark design system
+    └── aura.js            # Framework frontend bridge client</code></pre>
+        </div>
+      </section>
+
+      <!-- Section: CLI Reference -->
+      <section id="cli-reference">
+        <h2>💻 CLI Toolchain Reference</h2>
+        
+        <h3 id="cli-new"><code>auraui new &lt;name&gt;</code></h3>
+        <p>Initializes a clean boilerplate project configured with modern titlebars, route switching, and event listeners.</p>
+
+        <h3 id="cli-dev"><code>auraui dev</code></h3>
+        <p>Starts the application in development mode with unoptimized compilation and direct disk access to <code>ui/</code> assets for rapid iteration.</p>
+
+        <h3 id="cli-build"><code>auraui build</code></h3>
+        <p>Generates <code>vfs.h</code> from the <code>ui/</code> directory and invokes MSVC with maximum release optimizations (<code>/O2</code>), outputting the single release binary in <code>dist/</code>.</p>
+      </section>
+
+      <!-- Section: C++ Backend Guide -->
+      <section id="cpp-api">
+        <h2>⚙️ C++ Backend Guide (<code>auraui.hpp</code>)</h2>
+        <p>The core framework resides in the single include header <code>auraui.hpp</code>.</p>
+
+        <h3 id="cpp-app">Window Lifecycle &amp; App Instance</h3>
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-lang-tag">C++</span>
+            <button class="btn-copy">Copy</button>
+          </div>
+          <pre><code><span class="hl-kw">#include</span> <span class="hl-str">"auraui.hpp"</span>
+
+<span class="hl-type">int</span> <span class="hl-fn">main</span>() {
+    <span class="hl-com">// Initialize window: Title, Width, Height</span>
+    auraui::App app(<span class="hl-str">"AuraUI Application"</span>, <span class="hl-num">1080</span>, <span class="hl-num">720</span>);
+
+    <span class="hl-com">// Enforce minimum window bounds</span>
+    app.set_min_size(<span class="hl-num">800</span>, <span class="hl-num">500</span>);
+
+    <span class="hl-com">// Center the window on the active monitor</span>
+    app.set_center();
+
+    <span class="hl-com">// Security: permit or block clipboard inspection</span>
+    app.allow_clipboard_read(<span class="hl-kw">true</span>);
+
+    <span class="hl-com">// Enter application event loop</span>
+    <span class="hl-kw">return</span> app.run();
+}</code></pre>
+        </div>
+
+        <h3 id="cpp-routes">Express-Style Route Bindings</h3>
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-lang-tag">C++</span>
+            <button class="btn-copy">Copy</button>
+          </div>
+          <pre><code><span class="hl-com">// Bind custom function name</span>
+app.bind(<span class="hl-str">"add_numbers"</span>, [](<span class="hl-kw">const</span> auraui::Context&amp; ctx) {
+    <span class="hl-type">int</span> a = ctx.get&lt;<span class="hl-type">int</span>&gt;(<span class="hl-str">"a"</span>, <span class="hl-num">0</span>);
+    <span class="hl-type">int</span> b = ctx.get&lt;<span class="hl-type">int</span>&gt;(<span class="hl-str">"b"</span>, <span class="hl-num">0</span>);
+    ctx.json({{<span class="hl-str">"result"</span>, a + b}});
+});
+
+<span class="hl-com">// REST-style route handlers</span>
+app.get(<span class="hl-str">"/api/status"</span>, [](<span class="hl-kw">const</span> auraui::Context&amp; ctx) {
+    ctx.json({{<span class="hl-str">"status"</span>, <span class="hl-str">"online"</span>}, {<span class="hl-str">"uptime_sec"</span>, <span class="hl-num">3600</span>}});
+});
+
+app.post(<span class="hl-str">"/api/user"</span>, [](<span class="hl-kw">const</span> auraui::Context&amp; ctx) {
+    std::string username = ctx.get&lt;std::string&gt;(<span class="hl-str">"username"</span>, <span class="hl-str">"Guest"</span>);
+    ctx.json({{<span class="hl-str">"success"</span>, <span class="hl-kw">true</span>}, {<span class="hl-str">"user"</span>, username}});
+});</code></pre>
+        </div>
+
+        <h3 id="cpp-events">Pushing Real-Time Events (<code>app.emit</code>)</h3>
+        <p>Send unsolicited background telemetry or notifications to the UI from any thread:</p>
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-lang-tag">C++</span>
+            <button class="btn-copy">Copy</button>
+          </div>
+          <pre><code>app.emit(<span class="hl-str">"telemetry"</span>, {
+    {<span class="hl-str">"cpu_usage"</span>, <span class="hl-num">12.4</span>},
+    {<span class="hl-str">"ram_mb"</span>, <span class="hl-num">256.0</span>}
+});</code></pre>
+        </div>
+
+        <h3 id="cpp-dialogs">Native Win32 File Dialogs &amp; Shell Interop</h3>
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-lang-tag">C++</span>
+            <button class="btn-copy">Copy</button>
+          </div>
+          <pre><code><span class="hl-com">// Native Open File Dialog</span>
+std::string path = auraui::open_file_dialog(<span class="hl-str">"Open File"</span>, <span class="hl-str">"Text Files (*.txt)\0*.txt\0"</span>);
+
+<span class="hl-com">// Native Save File Dialog</span>
+std::string save = auraui::save_file_dialog(<span class="hl-str">"Save Document"</span>, <span class="hl-str">"report.pdf"</span>);
+
+<span class="hl-com">// Safe External URL Launch (protocol-whitelisted)</span>
+auraui::open_external(<span class="hl-str">"https://github.com"</span>);</code></pre>
+        </div>
+      </section>
+
+      <!-- Section: Frontend JS Guide -->
+      <section id="js-api">
+        <h2>🌐 Frontend JavaScript Guide (<code>aura.js</code>)</h2>
+        <p>The client library exposes the global <code>aura</code> API across all windows.</p>
+
+        <h3 id="js-call">Invoking C++ Backend Functions (<code>aura.call</code>)</h3>
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-lang-tag">JAVASCRIPT</span>
+            <button class="btn-copy">Copy</button>
+          </div>
+          <pre><code><span class="hl-kw">async function</span> <span class="hl-fn">calculateSum</span>() {
+    <span class="hl-kw">try</span> {
+        <span class="hl-kw">const</span> res = <span class="hl-kw">await</span> aura.<span class="hl-fn">call</span>(<span class="hl-str">'add_numbers'</span>, { a: <span class="hl-num">25</span>, b: <span class="hl-num">17</span> });
+        console.<span class="hl-fn">log</span>(<span class="hl-str">'Answer:'</span>, res.result); <span class="hl-com">// 42</span>
+    } <span class="hl-kw">catch</span> (err) {
+        console.<span class="hl-fn">error</span>(<span class="hl-str">'RPC failed:'</span>, err);
+    }
+}</code></pre>
+        </div>
+
+        <h3 id="js-events">Subscribing to Backend Events (<code>aura.on</code>)</h3>
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-lang-tag">JAVASCRIPT</span>
+            <button class="btn-copy">Copy</button>
+          </div>
+          <pre><code><span class="hl-com">// Listen to background telemetry from C++</span>
+<span class="hl-kw">const</span> unsubscribe = aura.<span class="hl-fn">on</span>(<span class="hl-str">'telemetry'</span>, (data) =&gt; {
+    document.<span class="hl-fn">getElementById</span>(<span class="hl-str">'cpu-val'</span>).innerText = data.cpu_usage + <span class="hl-str">'%'</span>;
+});</code></pre>
+        </div>
+
+        <h3 id="js-router">Client-Side SPA Routing (<code>aura.router</code>)</h3>
+        <p>Define views declaratively using the <code>data-aura-view</code> attribute:</p>
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-lang-tag">HTML</span>
+            <button class="btn-copy">Copy</button>
+          </div>
+          <pre><code>&lt;nav&gt;
+    &lt;button data-aura-route=<span class="hl-str">"/dashboard"</span> <span class="hl-kw">class</span>=<span class="hl-str">"active"</span>&gt;Dashboard&lt;/button&gt;
+    &lt;button data-aura-route=<span class="hl-str">"/settings"</span>&gt;Settings&lt;/button&gt;
+&lt;/nav&gt;
+
+&lt;div data-aura-view=<span class="hl-str">"/dashboard"</span> <span class="hl-kw">class</span>=<span class="hl-str">"active"</span>&gt;
+    &lt;h1&gt;Dashboard View&lt;/h1&gt;
+&lt;/div&gt;
+
+&lt;div data-aura-view=<span class="hl-str">"/settings"</span>&gt;
+    &lt;h1&gt;Settings View&lt;/h1&gt;
+&lt;/div&gt;</code></pre>
+        </div>
+
+        <h3 id="js-window">Frameless Window Controls (<code>aura.window</code>)</h3>
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-lang-tag">JAVASCRIPT</span>
+            <button class="btn-copy">Copy</button>
+          </div>
+          <pre><code><span class="hl-com">// Native minimize, maximize, and close</span>
+aura.window.<span class="hl-fn">minimize</span>();
+aura.window.<span class="hl-fn">maximize</span>();
+aura.window.<span class="hl-fn">close</span>();</code></pre>
+        </div>
+      </section>
+
+      <!-- Section: Interactive Demo -->
+      <section id="interactive-preview">
+        <h2>🎨 Interactive Component Simulation</h2>
+        <p>Experience how AuraUI UI components look and feel inside desktop applications:</p>
+
+        <div class="component-demo">
+          <div class="demo-titlebar">
+            <div class="demo-title">
+              <span>⚡</span>
+              <span>AuraUI Application Preview</span>
+            </div>
+            <div class="demo-controls">
+              <button class="demo-btn">🗕</button>
+              <button class="demo-btn">🗖</button>
+              <button class="demo-btn close">✕</button>
+            </div>
+          </div>
+          <div class="demo-body">
+            <div class="demo-card-grid">
+              <div class="demo-glass-card">
+                <h4>System Telemetry</h4>
+                <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 0.8rem;">Real-time metrics from C++ background thread.</p>
+                <div style="display: flex; gap: 0.5rem;">
+                  <span class="pill-badge cyan">CPU: 2.4%</span>
+                  <span class="pill-badge emerald">RAM: 42 MB</span>
+                </div>
+              </div>
+              <div class="demo-glass-card">
+                <h4>Interactive RPC Tester</h4>
+                <div class="demo-interactive-row" style="margin-top: 0.5rem;">
+                  <input type="number" id="demo-num-a" class="demo-input" value="15" style="width: 70px;">
+                  <span style="color: #94a3b8;">+</span>
+                  <input type="number" id="demo-num-b" class="demo-input" value="27" style="width: 70px;">
+                  <button id="demo-calc-run" class="demo-action-btn">Calculate</button>
+                </div>
+                <div id="demo-calc-res" style="font-family: var(--font-mono); font-size: 0.85rem; margin-top: 0.6rem; color: #94a3b8;">Result: 42</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: Security -->
+      <section id="security">
+        <h2>🛡️ Security &amp; Hardening</h2>
+        <p>AuraUI underwent a rigorous security audit addressing 7 critical threat vectors:</p>
+        
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Vulnerability</th>
+                <th>Remediation</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>SEC-01</strong></td>
+                <td>Arbitrary Shell Execution</td>
+                <td>Protocol whitelist (<code>https</code>, <code>http</code>, <code>mailto</code>) &amp; blocked 21 executable extensions.</td>
+                <td><span class="pill-badge emerald">Remediated</span></td>
+              </tr>
+              <tr>
+                <td><strong>SEC-02</strong></td>
+                <td>JavaScript Injection in emit()</td>
+                <td>Type-safe <code>nlohmann::json.dump()</code> ECMA-262 escaping.</td>
+                <td><span class="pill-badge emerald">Remediated</span></td>
+              </tr>
+              <tr>
+                <td><strong>SEC-03</strong></td>
+                <td>Buffer Over-read in Dialogs</td>
+                <td>Double-null terminated Win32 filter buffer allocation.</td>
+                <td><span class="pill-badge emerald">Remediated</span></td>
+              </tr>
+              <tr>
+                <td><strong>SEC-05</strong></td>
+                <td>Silent Clipboard Exfiltration</td>
+                <td>Enforced <code>app.allow_clipboard_read(bool)</code> security policy.</td>
+                <td><span class="pill-badge emerald">Remediated</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section: Troubleshooting -->
+      <section id="troubleshooting">
+        <h2>❓ Troubleshooting &amp; FAQ</h2>
+        <div class="alert-callout note">
+          <div class="alert-title">Q: How do I distribute my application to end users?</div>
+          <p>Simply distribute the <code>dist/my-app.exe</code> executable! Because WebView2 is built into Windows 10 and 11, users can double-click and run it with zero installation required.</p>
+        </div>
+
+        <div class="alert-callout note">
+          <div class="alert-title">Q: Can I use modern web frameworks like React or Svelte?</div>
+          <p>Yes. Set your bundler (Vite, Webpack, etc.) to output into the <code>ui/</code> directory. AuraUI will bundle your compiled assets directly into the C++ binary.</p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>
+      AuraUI Framework &copy; 2026 Andrew Byukusenge. Distributed under the <a href="https://github.com/Byukusenge-Andrew/auraui/blob/main/LICENSE">MIT License</a>.
+    </p>
+    <p style="margin-top: 0.5rem; font-size: 0.78rem;">
+      Built with C++20 and standard HTML5/CSS3. Hosted on GitHub Pages.
+    </p>
+  </footer>
+
+  <!-- Floating Back to Top Button -->
+  <button id="back-to-top" class="back-to-top" aria-label="Back to top">↑</button>
+
+  <script src="script.js"></script>
+</body>
+</html>
