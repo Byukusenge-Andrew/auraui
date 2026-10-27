@@ -3,7 +3,6 @@
   <h1>AuraUI</h1>
   <p><strong>The Modern, Lightweight C++ Desktop Framework with Standard HTML/CSS Styling</strong></p>
 
-  <a href="https://github.com/Byukusenge-Andrew/auraui/actions/workflows/ci.yml"><img src="https://github.com/Byukusenge-Andrew/auraui/actions/workflows/ci.yml/badge.svg" alt="CI Status" /></a>
   <a href="https://byukusenge-andrew.github.io/auraui/"><img src="https://img.shields.io/badge/Docs-GitHub%20Pages-27272a.svg" alt="Documentation" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-27272a.svg" alt="License: MIT" /></a>
 
