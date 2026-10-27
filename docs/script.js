@@ -16,9 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 try {
                     await navigator.clipboard.writeText(text);
                     const originalText = copyBtn.innerHTML;
-                    copyBtn.innerHTML = `<span>✓</span> Copied!`;
-                    copyBtn.style.color = '#34d399';
-                    copyBtn.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+                    copyBtn.innerHTML = `<span>✓</span> Copied`;
+                    copyBtn.style.color = 'var(--text-primary)';
+                    copyBtn.style.borderColor = 'var(--border-strong)';
                     
                     setTimeout(() => {
                         copyBtn.innerHTML = originalText;
@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const valB = parseFloat(document.getElementById('demo-num-b').value) || 0;
             const resultDisplay = document.getElementById('demo-calc-res');
             resultDisplay.textContent = `Result: ${valA + valB}`;
-            resultDisplay.style.color = '#34d399';
+            resultDisplay.style.color = 'var(--text-primary)';
         });
     }
 });

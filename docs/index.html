@@ -122,17 +122,17 @@
     <!-- Main Content Stream -->
     <main class="docs-content">
       
-      <!-- Hero Banner -->
+      <!-- Hero Section -->
       <section class="docs-hero">
-        <h1 class="hero-title">AuraUI Developer Manual</h1>
+        <h1 class="hero-title">AuraUI Documentation</h1>
         <p class="hero-subtitle">
-          The high-performance, lightweight C++20 desktop framework with standard HTML5/CSS3 frontends and single-binary packaging.
+          A high-performance C++20 desktop framework utilizing native webview rendering and embedded Virtual File Systems for compact, single-binary applications.
         </p>
         <div class="hero-badges">
-          <span class="pill-badge cyan">⚡ ~480 KB Standalone Binary</span>
-          <span class="pill-badge indigo">🛡️ Hardened & Audited IPC</span>
-          <span class="pill-badge emerald">🚀 Zero External DLLs</span>
-          <span class="pill-badge">💎 Pure C++20 Engine</span>
+          <span class="pill-badge">~480 KB Standalone Binary</span>
+          <span class="pill-badge">Pure C++20</span>
+          <span class="pill-badge">HTML5 / CSS3</span>
+          <span class="pill-badge status-ok">Zero External DLLs</span>
         </div>
       </section>
 
@@ -446,10 +446,10 @@ aura.window.<span class="hl-fn">close</span>();</code></pre>
             <div class="demo-card-grid">
               <div class="demo-glass-card">
                 <h4>System Telemetry</h4>
-                <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 0.8rem;">Real-time metrics from C++ background thread.</p>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.8rem;">Real-time metrics from C++ background thread.</p>
                 <div style="display: flex; gap: 0.5rem;">
-                  <span class="pill-badge cyan">CPU: 2.4%</span>
-                  <span class="pill-badge emerald">RAM: 42 MB</span>
+                  <span class="pill-badge">CPU: 2.4%</span>
+                  <span class="pill-badge">RAM: 42 MB</span>
                 </div>
               </div>
               <div class="demo-glass-card">
@@ -487,25 +487,25 @@ aura.window.<span class="hl-fn">close</span>();</code></pre>
                 <td><strong>SEC-01</strong></td>
                 <td>Arbitrary Shell Execution</td>
                 <td>Protocol whitelist (<code>https</code>, <code>http</code>, <code>mailto</code>) &amp; blocked 21 executable extensions.</td>
-                <td><span class="pill-badge emerald">Remediated</span></td>
+                <td><span class="pill-badge status-ok">Remediated</span></td>
               </tr>
               <tr>
                 <td><strong>SEC-02</strong></td>
                 <td>JavaScript Injection in emit()</td>
                 <td>Type-safe <code>nlohmann::json.dump()</code> ECMA-262 escaping.</td>
-                <td><span class="pill-badge emerald">Remediated</span></td>
+                <td><span class="pill-badge status-ok">Remediated</span></td>
               </tr>
               <tr>
                 <td><strong>SEC-03</strong></td>
                 <td>Buffer Over-read in Dialogs</td>
                 <td>Double-null terminated Win32 filter buffer allocation.</td>
-                <td><span class="pill-badge emerald">Remediated</span></td>
+                <td><span class="pill-badge status-ok">Remediated</span></td>
               </tr>
               <tr>
                 <td><strong>SEC-05</strong></td>
                 <td>Silent Clipboard Exfiltration</td>
                 <td>Enforced <code>app.allow_clipboard_read(bool)</code> security policy.</td>
-                <td><span class="pill-badge emerald">Remediated</span></td>
+                <td><span class="pill-badge status-ok">Remediated</span></td>
               </tr>
             </tbody>
           </table>

@@ -1,8 +1,8 @@
 # AuraUI 🌟
 
 [![CI](https://github.com/Byukusenge-Andrew/auraui/actions/workflows/ci.yml/badge.svg)](https://github.com/Byukusenge-Andrew/auraui/actions/workflows/ci.yml)
-[![Documentation](https://img.shields.io/badge/Docs-GitHub%20Pages-06b6d4.svg)](https://byukusenge-andrew.github.io/auraui/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-6366f1.svg)](LICENSE)
+[![Documentation](https://img.shields.io/badge/Docs-GitHub%20Pages-27272a.svg)](https://byukusenge-andrew.github.io/auraui/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-27272a.svg)](LICENSE)
 
 > **The Modern, Lightweight C++ Desktop Framework with Standard HTML/CSS Styling**
 
