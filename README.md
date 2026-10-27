@@ -2,9 +2,12 @@
 
 > **The Modern, Lightweight C++ Desktop Framework with Standard HTML/CSS Styling**
 
+📖 **[Full User Guide & Developer Manual](file:///d:/tradegraph/docs/USER_GUIDE.md)** | 🛡️ **[Security Audit Report](file:///d:/tradegraph/SECURITY_AUDIT.md)**
+
 AuraUI bridges the gap between **high-performance C++20 business logic** and the **speed and aesthetic power of modern HTML5/CSS3**. Build desktop apps with custom frameless title bars, glassmorphic dark-mode aesthetics, and responsive layouts, all compiling to a **single standalone Windows executable (~450 KB)** with zero external dependencies.
 
 ---
+
 
 ## ⚡ Quick Start
 
@@ -252,7 +255,10 @@ AuraUI comes with ready-to-use glassmorphic dark-mode CSS tokens:
 - [`auraui/cli/auraui.py`](file:///d:/tradegraph/auraui/cli/auraui.py): Python CLI compiler and asset bundler.
 - [`auraui/cli/aura.css`](file:///d:/tradegraph/auraui/cli/aura.css): Default design system.
 - [`auraui/cli/aura.js`](file:///d:/tradegraph/auraui/cli/aura.js): JavaScript client bridge.
+- [`docs/USER_GUIDE.md`](file:///d:/tradegraph/docs/USER_GUIDE.md): In-depth User Guide & API reference manual.
 - [`showcase/`](file:///d:/tradegraph/showcase/): Complete demonstration application (multi-threaded prime benchmark, telemetry, native dialogs).
 - [`templates/default/`](file:///d:/tradegraph/templates/default/): Starter boilerplate used by `auraui new`.
 - [`SECURITY_AUDIT.md`](file:///d:/tradegraph/SECURITY_AUDIT.md): Formal Security Audit & Hardening Report detailing remediation for SEC-01 through SEC-07.
+- [`LICENSE`](file:///d:/tradegraph/LICENSE): MIT License.
+
 
