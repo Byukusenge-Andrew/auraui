@@ -1,32 +1,61 @@
-# AuraUI Build & Intermediate Artifacts
-dist/
+# Build directories
 build/
-build_dev/
-**/vfs.h
+build-*/
+cmake-build-*/
+out/
+dist/
+bin/
+
+# CMake artifacts & user presets
+CMakeUserPresets.json
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+# Compiled binaries and libraries
 *.exe
-*.obj
-*.exp
-*.pdb
-*.ilk
-*.idb
-
-# Static libraries (keep auraui bundled prebuilt lib)
+*.dll
+*.so
+*.dylib
+*.a
 *.lib
-!auraui/lib/*.lib
+*.exp
+*.ilk
+*.pdb
+*.idb
+*.obj
+*.o
 
-# Temporary sample app (created during testing)
-sample-app/
-ci-app/
-ci-*/
+# Generated sources & assets
+**/vfs.h
+**/types.gen.ts
+aura.config.gen.*
 
+# Node / Client package
+node_modules/
+packages/client/dist/
+packages/client/node_modules/
+.npm/
+package-lock.json
 
-# Upstream vendor submodule/checkout (auraui is self-contained in auraui/include and auraui/lib)
-vendor/
-
-# Python bytecode & cache
+# Python bytecode & environments
 __pycache__/
 *.py[cod]
 *$py.class
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# Testing & Sanitizer logs & Fuzzing corpora
+Testing/
+*.profraw
+*.profdata
+crash-*
+leak-*
+timeout-*
+oom-*
 
 # IDE & Editor files
 .vs/
@@ -40,5 +69,8 @@ __pycache__/
 Thumbs.db
 desktop.ini
 
-# Local state
+# Local testing and scratch
 .necropet.json
+sample-app/
+ci-*/
+tmp/

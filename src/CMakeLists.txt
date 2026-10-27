@@ -1,0 +1,22 @@
+target_sources(auraui PRIVATE
+    core/app.cpp
+    core/utf8.cpp
+    core/ipc_envelope.cpp
+    core/config.cpp
+    core/validator.cpp
+    core/rate_limiter.cpp
+    core/thread_pool.cpp
+    core/store.cpp
+    core/dispatcher.cpp
+    security/capability_policy.cpp
+    security/url_policy.cpp
+    security/path_policy.cpp
+    security/grants.cpp
+    security/csp.cpp
+    assets/mime.cpp
+    assets/asset_store.cpp
+    assets/asset_server.cpp
+    backend/webview_backend.cpp
+    platform/windows/windows_platform.cpp
+    modules/builtin_modules.cpp
+)

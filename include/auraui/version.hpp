@@ -1,0 +1,6 @@
+#pragma once
+
+#define AURAUI_VERSION_MAJOR 2
+#define AURAUI_VERSION_MINOR 0
+#define AURAUI_VERSION_PATCH 0
+#define AURAUI_VERSION_STRING "2.0.0"

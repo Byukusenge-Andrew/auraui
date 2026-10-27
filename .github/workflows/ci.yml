@@ -1,0 +1,97 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  format-and-lint:
+    name: Code Quality & Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Install Clang Tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang-format clang-tidy
+
+      - name: Check Formatting
+        run: |
+          find include src tests -name "*.cpp" -o -name "*.hpp" -o -name "*.h" | xargs clang-format --dry-run --Werror
+
+  build-cross-platform:
+    name: Build & Test (${{ matrix.os }} - ${{ matrix.config }})
+    needs: format-and-lint
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            preset: ci-windows
+            config: Release
+          - os: ubuntu-latest
+            preset: ci-linux
+            config: Release
+          - os: macos-latest
+            preset: ci-macos
+            config: Release
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Install Linux Dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev xvfb ninja-build
+
+      - name: Setup Ninja
+        if: runner.os != 'Windows'
+        run: |
+          cmake --version
+          ninja --version
+
+      - name: Configure CMake
+        run: cmake --preset ${{ matrix.preset }}
+
+      - name: Build Targets
+        run: cmake --build --preset ${{ matrix.preset }} --config ${{ matrix.config }}
+
+      - name: Run Tests (Windows / macOS)
+        if: runner.os != 'Linux'
+        run: ctest --preset unit-tests
+
+      - name: Run Tests (Linux xvfb)
+        if: runner.os == 'Linux'
+        run: xvfb-run --auto-servernum ctest --preset unit-tests
+
+  sanitizers:
+    name: Sanitizers (Linux Clang ASan + UBSan)
+    needs: format-and-lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Install Linux Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev xvfb clang ninja-build
+
+      - name: Configure CMake with ASan + UBSan
+        run: cmake --preset linux-clang-asan
+
+      - name: Build with ASan
+        run: cmake --build --preset linux-clang-asan
+
+      - name: Run Tests under ASan
+        run: xvfb-run --auto-servernum ctest --test-dir build/linux-clang-asan --output-on-failure

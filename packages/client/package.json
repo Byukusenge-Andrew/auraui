@@ -1,0 +1,21 @@
+{
+  "name": "@auraui/client",
+  "version": "2.0.0",
+  "description": "Official TypeScript client for AuraUI 2 native desktop applications",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "auraui",
+    "desktop",
+    "ipc",
+    "native",
+    "webview"
+  ],
+  "author": "Byukusenge Andrew",
+  "license": "MIT"
+}

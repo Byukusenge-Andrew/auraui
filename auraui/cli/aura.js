@@ -253,9 +253,30 @@
 
         /**
          * Persistent App State Store
+         * Backed by native C++ backend saving to %APPDATA%/AuraUI/<AppName>/store.json
+         * Survives browser cache clear, incognito, and dynamic WebUI ephemeral ports.
          */
         store: {
+            _cache: {},
+            _initialized: false,
+
+            async init() {
+                try {
+                    await aura.__ensureReady();
+                    const all = await aura.call('__aura_store_get_all');
+                    if (all && typeof all === 'object') {
+                        aura.store._cache = Object.assign({}, all);
+                    }
+                    aura.store._initialized = true;
+                } catch {
+                    // Fall back to localStorage if bridge not connected
+                }
+            },
+
             get(key, defaultVal = null) {
+                if (aura.store._cache.hasOwnProperty(key)) {
+                    return aura.store._cache[key];
+                }
                 try {
                     const item = localStorage.getItem(`aura_${key}`);
                     return item !== null ? JSON.parse(item) : defaultVal;
@@ -263,18 +284,33 @@
                     return defaultVal;
                 }
             },
+
+            async fetch(key, defaultVal = null) {
+                try {
+                    const res = await aura.call('__aura_store_get', { key });
+                    if (res && res.found) {
+                        aura.store._cache[key] = res.value;
+                        return res.value;
+                    }
+                } catch {}
+                return defaultVal;
+            },
+
             set(key, value) {
+                aura.store._cache[key] = value;
                 try {
                     localStorage.setItem(`aura_${key}`, JSON.stringify(value));
-                    return true;
-                } catch {
-                    return false;
-                }
+                } catch {}
+                // Persist asynchronously to C++ APPDATA backend
+                return aura.call('__aura_store_set', { key, value }).catch(() => false);
             },
+
             remove(key) {
+                delete aura.store._cache[key];
                 try {
                     localStorage.removeItem(`aura_${key}`);
                 } catch {}
+                return aura.call('__aura_store_remove', { key }).catch(() => false);
             }
         },
 
@@ -343,6 +379,9 @@
                 });
             }
         });
+
+        // Initialize persistent store from C++ backend
+        aura.store.init();
 
         // Initialize Router if views exist on the page
         if (document.querySelector('[data-aura-view]')) {

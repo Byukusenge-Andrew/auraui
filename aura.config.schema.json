@@ -1,0 +1,216 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://auraui.dev/schemas/aura.config.schema.json",
+  "title": "AuraUI Application Configuration Manifest",
+  "description": "Defines metadata, window parameters, IPC limits, and granted native capabilities for an AuraUI desktop application.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "app"],
+  "properties": {
+    "version": {
+      "type": "integer",
+      "enum": [1],
+      "description": "Manifest schema version (currently 1)."
+    },
+    "app": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$",
+          "description": "Reverse-DNS unique identifier for the application (e.g. com.example.myapp)."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "Human-readable application display name."
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[a-zA-Z0-9.]+)?$",
+          "description": "Semantic application version string."
+        }
+      }
+    },
+    "window": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Window title bar text."
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 16384,
+          "default": 1000
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 16384,
+          "default": 700
+        },
+        "min_width": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 16384
+        },
+        "min_height": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 16384
+        },
+        "frameless": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to use custom frameless window chrome."
+        },
+        "resizable": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "capabilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Explicit grant declarations for native capabilities (deny-by-default).",
+      "properties": {
+        "window.control": {
+          "type": "boolean",
+          "description": "Allow minimize, maximize, restore, close window."
+        },
+        "dialog.open": {
+          "oneOf": [
+            { "type": "boolean" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "filters": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                }
+              }
+            }
+          ]
+        },
+        "dialog.save": {
+          "oneOf": [
+            { "type": "boolean" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "filters": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                }
+              }
+            }
+          ]
+        },
+        "dialog.folder": {
+          "type": "boolean"
+        },
+        "clipboard.write": {
+          "type": "boolean"
+        },
+        "clipboard.read": {
+          "type": "boolean"
+        },
+        "shell.open_url": {
+          "oneOf": [
+            { "type": "boolean" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "allowed_hosts": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                }
+              }
+            }
+          ]
+        },
+        "shell.reveal_path": {
+          "type": "boolean"
+        },
+        "fs.read_granted": {
+          "oneOf": [
+            { "type": "boolean" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "max_bytes": { "type": "integer", "minimum": 1 }
+              }
+            }
+          ]
+        },
+        "fs.write_granted": {
+          "oneOf": [
+            { "type": "boolean" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "max_bytes": { "type": "integer", "minimum": 1 }
+              }
+            }
+          ]
+        },
+        "system.info": {
+          "type": "boolean"
+        },
+        "system.identity": {
+          "type": "boolean"
+        },
+        "store.local": {
+          "type": "boolean"
+        }
+      }
+    },
+    "ipc": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "max_request_bytes": {
+          "type": "integer",
+          "minimum": 1024,
+          "maximum": 16777216,
+          "default": 1048576,
+          "description": "Maximum payload size in bytes per IPC message (default 1 MiB)."
+        },
+        "rate_limit_per_sec": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000,
+          "default": 100,
+          "description": "Global IPC invocation limit per second."
+        }
+      }
+    },
+    "dev": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Development-only options. Asserted to be absent or ignored in release builds.",
+      "properties": {
+        "devtools": {
+          "type": "boolean",
+          "default": true
+        },
+        "hot_reload": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    }
+  }
+}

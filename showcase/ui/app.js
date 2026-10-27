@@ -1,4 +1,4 @@
-// Showcase Application Logic
+// Showcase Application Logic for AuraUI 2.0
 
 document.addEventListener('DOMContentLoaded', () => {
     setupTabNavigation();
@@ -6,7 +6,19 @@ document.addEventListener('DOMContentLoaded', () => {
     setupBenchmark();
     setupDialogs();
     setupTextProcessing();
+    setupWindowControls();
 });
+
+// Window controls
+function setupWindowControls() {
+    const minBtn = document.getElementById('aura-win-min');
+    const maxBtn = document.getElementById('aura-win-max');
+    const closeBtn = document.getElementById('aura-win-close');
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => Aura.window.close());
+    }
+}
 
 // Tab Switching
 function setupTabNavigation() {
@@ -40,17 +52,17 @@ async function setupTelemetry() {
 
     async function loadTelemetry() {
         try {
-            const data = await aura.call('get_system_telemetry');
+            const data = await Aura.invoke('get_system_telemetry');
             if (data.overview) {
                 statOs.textContent = `${data.overview.os} (${data.overview.arch})`;
-                statCores.textContent = `${data.overview.cpu_cores} Logical`;
+                statCores.textContent = `${data.overview.cpu_cores} Logical Cores`;
                 statHost.textContent = data.overview.computer_name;
             }
 
-            if (data.memory && !data.memory.error) {
+            if (data.memory) {
                 const mem = data.memory;
                 statRamPct.textContent = `${mem.percent_used}%`;
-                statRamAvail.textContent = `${mem.avail_gb.toFixed(1)} GB`;
+                statRamAvail.textContent = `${mem.avail_gb.toFixed(1)} GB Free`;
                 statRamTotal.textContent = `${mem.total_gb.toFixed(1)} GB`;
                 ramBar.style.width = `${mem.percent_used}%`;
             }
@@ -59,9 +71,8 @@ async function setupTelemetry() {
         }
     }
 
-    refreshBtn.addEventListener('click', loadTelemetry);
+    if (refreshBtn) refreshBtn.addEventListener('click', loadTelemetry);
     loadTelemetry();
-    // Auto refresh every 5 seconds
     setInterval(loadTelemetry, 5000);
 }
 
@@ -75,6 +86,8 @@ function setupBenchmark() {
     const resTime = document.getElementById('res-time');
     const resSpeed = document.getElementById('res-speed');
 
+    if (!btnRun) return;
+
     btnRun.addEventListener('click', async () => {
         const limit = parseInt(inputLimit.value, 10) || 1000000;
         const threads = parseInt(selectThreads.value, 10) || 4;
@@ -83,7 +96,7 @@ function setupBenchmark() {
             btnRun.disabled = true;
             btnRun.textContent = 'Calculating in C++...';
 
-            const res = await aura.call('run_benchmark', { limit, threads });
+            const res = await Aura.invoke('run_benchmark', { limit, threads });
 
             boxResults.style.display = 'flex';
             resPrimes.textContent = res.primes_found.toLocaleString();
@@ -100,31 +113,46 @@ function setupBenchmark() {
     });
 }
 
-// Win32 Native Dialogs
+// Native Dialogs
 function setupDialogs() {
     const btnOpen = document.getElementById('btn-open-file');
     const btnSave = document.getElementById('btn-save-file');
     const output = document.getElementById('dialog-output');
 
-    btnOpen.addEventListener('click', async () => {
-        output.textContent = 'Opening native file dialog...';
-        const res = await aura.dialog.open({ filter: 'All Files (*.*)\0*.*\0' });
-        if (res.cancelled) {
-            output.textContent = 'User cancelled file selection.';
-        } else {
-            output.textContent = `Selected File: ${res.path}`;
-        }
-    });
+    if (btnOpen) {
+        btnOpen.addEventListener('click', async () => {
+            output.textContent = 'Opening native file dialog...';
+            try {
+                const res = await Aura.dialog.openFile({
+                    title: 'Select a file',
+                    filters: [{ name: 'All Files', extensions: ['*'] }]
+                });
+                if (res.canceled || !res.filePaths.length) {
+                    output.textContent = 'User cancelled file selection.';
+                } else {
+                    output.textContent = `Selected File: ${res.filePaths.join(', ')}`;
+                }
+            } catch (err) {
+                output.textContent = 'Dialog Error: ' + err.message;
+            }
+        });
+    }
 
-    btnSave.addEventListener('click', async () => {
-        output.textContent = 'Opening native save dialog...';
-        const res = await aura.dialog.save({ default_name: 'export.txt' });
-        if (res.cancelled) {
-            output.textContent = 'User cancelled save dialog.';
-        } else {
-            output.textContent = `Save Location: ${res.path}`;
-        }
-    });
+    if (btnSave) {
+        btnSave.addEventListener('click', async () => {
+            output.textContent = 'Opening native save dialog...';
+            try {
+                const res = await Aura.dialog.saveFile({ title: 'Save File As' });
+                if (res.canceled || !res.filePath) {
+                    output.textContent = 'User cancelled save dialog.';
+                } else {
+                    output.textContent = `Save Location: ${res.filePath}`;
+                }
+            } catch (err) {
+                output.textContent = 'Dialog Error: ' + err.message;
+            }
+        });
+    }
 }
 
 // C++ String Processing
@@ -134,12 +162,14 @@ function setupTextProcessing() {
     const words = document.getElementById('text-words');
     const reversed = document.getElementById('text-reversed');
 
+    if (!input) return;
+
     let debounceTimer = null;
 
     async function triggerProcessing() {
         const text = input.value;
         try {
-            const res = await aura.call('process_text', { text });
+            const res = await Aura.invoke('process_text', { text });
             chars.textContent = res.char_count;
             words.textContent = res.word_count;
             reversed.textContent = res.reversed;

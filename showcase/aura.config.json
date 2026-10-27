@@ -1,0 +1,38 @@
+{
+  "$schema": "../../aura.config.schema.json",
+  "version": 1,
+  "appId": "com.auraui.showcase",
+  "appName": "AuraUI 2.0 Showcase",
+  "appVersion": "2.0.0",
+  "window": {
+    "title": "AuraUI 2.0 - High Performance Native Desktop Showcase",
+    "width": 1100,
+    "height": 750,
+    "minWidth": 800,
+    "minHeight": 600,
+    "resizable": true,
+    "frameless": false
+  },
+  "capabilities": {
+    "system.info": true,
+    "clipboard.read": true,
+    "clipboard.write": true,
+    "dialog.open": true,
+    "dialog.save": true,
+    "shell.open_external": true,
+    "store.read": true,
+    "store.write": true
+  },
+  "security": {
+    "csp": {
+      "default-src": ["'self'"],
+      "script-src": ["'self'"],
+      "style-src": ["'self'", "'unsafe-inline'"],
+      "img-src": ["'self'", "data:"]
+    }
+  },
+  "ipc": {
+    "rateLimitPerSec": 200,
+    "maxRequestBytes": 1048576
+  }
+}

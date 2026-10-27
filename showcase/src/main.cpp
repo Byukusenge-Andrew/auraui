@@ -1,14 +1,14 @@
-#include "auraui.hpp"
+#include "auraui/auraui.hpp"
+#include "platform/platform.hpp"
+
 #include <chrono>
 #include <thread>
 #include <vector>
 #include <future>
-#include <numeric>
+#include <algorithm>
+#include <sstream>
 
-#if __has_include("vfs.h")
-#include "vfs.h"
-#define HAS_EMBEDDED_VFS 1
-#endif
+using namespace auraui;
 
 // High performance C++ calculation: Prime counting benchmark
 static bool is_prime(int n) {
@@ -30,13 +30,17 @@ static int count_primes_range(int start, int end) {
 }
 
 int main() {
-    // 1. Initialize modern AuraUI window (1080 x 740)
-    auraui::App app("AuraUI - Modern C++ Desktop Showcase", 1080, 740);
-    app.set_min_size(880, 600);
-    app.set_center();
+    AppOptions opts;
+    opts.title = "AuraUI 2.0 - Native Desktop Showcase";
+    opts.config_path = "showcase/aura.config.json";
+    opts.asset_path = "showcase/ui";
+    opts.width = 1100;
+    opts.height = 750;
 
-    // 2. Bind C++ Benchmark
-    app.bind("run_benchmark", [](const auraui::Context& ctx) {
+    App app(opts);
+
+    // 1. C++ Benchmark Command
+    app.command("run_benchmark", [](Context ctx, Reply reply) {
         int limit = ctx.get<int>("limit", 2000000);
         int threads_count = ctx.get<int>("threads", 4);
         if (threads_count < 1) threads_count = 1;
@@ -58,53 +62,56 @@ int main() {
         }
 
         auto t1 = std::chrono::high_resolution_clock::now();
-        double elapsed_ms = std::chrono::duration<double, std::milli>(t1 - t0).count();
+        double ms = std::chrono::duration<double, std::milli>(t1 - t0).count();
 
-        return auraui::json{
-            {"limit", limit},
-            {"threads", threads_count},
+        reply.send({
             {"primes_found", total_primes},
-            {"elapsed_ms", elapsed_ms}
-        };
+            {"elapsed_ms", ms}
+        });
     });
 
-    // 3. Bind C++ System Stats
-    app.bind("get_system_telemetry", [](const auraui::Context&) {
-        return auraui::json{
-            {"overview", auraui::system::get_system_overview()},
-            {"memory", auraui::system::get_memory_info()}
-        };
+    // 2. System Telemetry Command
+    app.command("get_system_telemetry", [](Context, Reply reply) {
+        auto info = platform::Platform::get_system_info();
+        double total_gb = static_cast<double>(info.total_memory_bytes) / (1024.0 * 1024.0 * 1024.0);
+        double avail_gb = static_cast<double>(info.available_memory_bytes) / (1024.0 * 1024.0 * 1024.0);
+        int pct = (info.total_memory_bytes > 0)
+            ? static_cast<int>(100.0 * (1.0 - (static_cast<double>(info.available_memory_bytes) / info.total_memory_bytes)))
+            : 0;
+
+        reply.send({
+            {"overview", {
+                {"os", info.os_name + " " + info.os_version},
+                {"arch", info.architecture},
+                {"cpu_cores", info.cpu_count},
+                {"computer_name", "Local Desktop"}
+            }},
+            {"memory", {
+                {"total_gb", total_gb},
+                {"avail_gb", avail_gb},
+                {"percent_used", pct}
+            }}
+        });
     });
 
-    // 4. Bind C++ Text processing / cryptographic hashing simulation
-    app.bind("process_text", [](const auraui::Context& ctx) {
-        std::string input = ctx.get<std::string>("text", "");
-        
-        // Count words, chars, uppercase
-        int words = 0;
-        std::stringstream ss(input);
+    // 3. String Processing Command
+    app.command("process_text", [](Context ctx, Reply reply) {
+        std::string text = ctx.get<std::string>("text", "");
+        std::string rev = text;
+        std::reverse(rev.begin(), rev.end());
+
+        std::stringstream ss(text);
         std::string word;
+        int words = 0;
         while (ss >> word) words++;
 
-        std::string reversed = input;
-        std::reverse(reversed.begin(), reversed.end());
-
-        return auraui::json{
-            {"char_count", input.size()},
+        reply.send({
+            {"char_count", text.size()},
             {"word_count", words},
-            {"reversed", reversed}
-        };
+            {"reversed", rev}
+        });
     });
 
-    // 5. Load UI (from embedded VFS in Release, or local files in Dev)
-#if defined(HAS_EMBEDDED_VFS)
-    app.set_vfs(aura_vfs_handler);
-    app.start("index.html");
-#else
-    app.start("ui/index.html");
-#endif
-
-    // 6. Run native loop
-    app.run();
-    return 0;
+    // 4. Run application with entry point
+    return app.run("index.html");
 }

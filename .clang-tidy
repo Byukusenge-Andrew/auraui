@@ -1,0 +1,30 @@
+---
+Checks: >
+  -*,
+  bugprone-*,
+  cert-*,
+  clang-analyzer-*,
+  performance-*,
+  cppcoreguidelines-interfaces-global-init,
+  cppcoreguidelines-no-malloc,
+  cppcoreguidelines-slicing,
+  modernize-deprecated-headers,
+  modernize-make-shared,
+  modernize-make-unique,
+  modernize-redundant-void-arg,
+  modernize-use-auto,
+  modernize-use-bool-literals,
+  modernize-use-emplace,
+  modernize-use-equals-default,
+  modernize-use-equals-delete,
+  modernize-use-nodiscard,
+  modernize-use-nullptr,
+  modernize-use-override
+
+WarningsAsErrors: >
+  bugprone-*,
+  cert-*
+
+HeaderFilterRegex: 'auraui/.*'
+FormatStyle: file
+...
