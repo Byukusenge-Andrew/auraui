@@ -1,8 +1,13 @@
 # AuraUI 🌟
 
+[![CI](https://github.com/Byukusenge-Andrew/auraui/actions/workflows/ci.yml/badge.svg)](https://github.com/Byukusenge-Andrew/auraui/actions/workflows/ci.yml)
+[![Documentation](https://img.shields.io/badge/Docs-GitHub%20Pages-06b6d4.svg)](https://byukusenge-andrew.github.io/auraui/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-6366f1.svg)](LICENSE)
+
 > **The Modern, Lightweight C++ Desktop Framework with Standard HTML/CSS Styling**
 
 📖 **[Full User Guide & Developer Manual](file:///d:/tradegraph/docs/USER_GUIDE.md)** | 🛡️ **[Security Audit Report](file:///d:/tradegraph/SECURITY_AUDIT.md)**
+
 
 AuraUI bridges the gap between **high-performance C++20 business logic** and the **speed and aesthetic power of modern HTML5/CSS3**. Build desktop apps with custom frameless title bars, glassmorphic dark-mode aesthetics, and responsive layouts, all compiling to a **single standalone Windows executable (~450 KB)** with zero external dependencies.
 

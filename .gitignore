@@ -16,6 +16,9 @@ build_dev/
 
 # Temporary sample app (created during testing)
 sample-app/
+ci-app/
+ci-*/
+
 
 # Upstream vendor submodule/checkout (auraui is self-contained in auraui/include and auraui/lib)
 vendor/

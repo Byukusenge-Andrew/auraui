@@ -137,16 +137,28 @@ def cmd_bundle(args):
 
 def find_vcvarsall():
     """Detect MSVC vcvarsall.bat"""
+    # 1. Check environment variables (e.g. CI runners or developer prompts)
+    if "VCINSTALLDIR" in os.environ:
+        vcvars = Path(os.environ["VCINSTALLDIR"]) / "Auxiliary" / "Build" / "vcvarsall.bat"
+        if vcvars.exists():
+            return vcvars
+    if "VSINSTALLDIR" in os.environ:
+        vcvars = Path(os.environ["VSINSTALLDIR"]) / "VC" / "Auxiliary" / "Build" / "vcvarsall.bat"
+        if vcvars.exists():
+            return vcvars
+
+    # 2. Query vswhere
     vswhere = Path(r"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe")
     if vswhere.exists():
         cmd = f'"{vswhere}" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath'
         res = subprocess.run(cmd, capture_output=True, text=True, shell=True)
         if res.returncode == 0 and res.stdout.strip():
-            vs_path = Path(res.stdout.strip())
+            vs_path = Path(res.stdout.strip().splitlines()[0])
             vcvars = vs_path / "VC" / "Auxiliary" / "Build" / "vcvarsall.bat"
             if vcvars.exists():
                 return vcvars
     return None
+
 
 
 def cmd_build(args):

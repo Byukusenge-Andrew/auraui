@@ -1,0 +1,118 @@
+name: AuraUI Continuous Integration
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-validate:
+    name: Build & Validate (Windows MSVC x64)
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Initialize MSVC Developer Environment
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: Verify CLI Toolchain
+        shell: pwsh
+        run: |
+          python auraui/cli/auraui.py --help
+
+      - name: Scaffold Starter Project (auraui new)
+        shell: pwsh
+        run: |
+          python auraui/cli/auraui.py new ci-app
+          if (-not (Test-Path "ci-app/auraui.json")) {
+            Write-Error "Failed: ci-app/auraui.json does not exist."
+            exit 1
+          }
+          if (-not (Test-Path "ci-app/src/main.cpp")) {
+            Write-Error "Failed: ci-app/src/main.cpp does not exist."
+            exit 1
+          }
+
+      - name: Compile Starter Project (auraui build)
+        shell: pwsh
+        run: |
+          cd ci-app
+          python ../auraui/cli/auraui.py build
+          cd ..
+
+      - name: Validate Starter Executable Artifact
+        shell: pwsh
+        run: |
+          $bin = "ci-app/dist/ci-app.exe"
+          if (-not (Test-Path $bin)) {
+            Write-Error "Validation Failure: $bin was not generated!"
+            exit 1
+          }
+          $bytes = (Get-Item $bin).Length
+          $sizeKb = [math]::Round($bytes / 1KB, 1)
+          Write-Host "✅ Scaffolded binary compiled successfully: $bin ($sizeKb KB)"
+          if ($bytes -lt 100000) {
+            Write-Error "Validation Failure: $bin is suspiciously small ($bytes bytes)!"
+            exit 1
+          }
+
+      - name: Compile Showcase Application (Complex C++20 & VFS)
+        shell: pwsh
+        run: |
+          cd showcase
+          python ../auraui/cli/auraui.py build
+          cd ..
+
+      - name: Validate Showcase Executable Artifact
+        shell: pwsh
+        run: |
+          $bin = "showcase/dist/showcase.exe"
+          if (-not (Test-Path $bin)) {
+            Write-Error "Validation Failure: $bin was not generated!"
+            exit 1
+          }
+          $bytes = (Get-Item $bin).Length
+          $sizeKb = [math]::Round($bytes / 1KB, 1)
+          Write-Host "✅ Showcase binary compiled successfully: $bin ($sizeKb KB)"
+          if ($bytes -lt 100000) {
+            Write-Error "Validation Failure: $bin is suspiciously small ($bytes bytes)!"
+            exit 1
+          }
+
+      - name: Upload Standalone Showcase Binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: auraui-showcase-windows-x64
+          path: showcase/dist/showcase.exe
+          if-no-files-found: error
+
+  validate-docs:
+    name: Validate Documentation & Pages Assets
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Verify Documentation Files
+        run: |
+          test -f docs/index.html || { echo "Missing docs/index.html"; exit 1; }
+          test -f docs/style.css || { echo "Missing docs/style.css"; exit 1; }
+          test -f docs/script.js || { echo "Missing docs/script.js"; exit 1; }
+          test -f docs/USER_GUIDE.md || { echo "Missing docs/USER_GUIDE.md"; exit 1; }
+          test -f SECURITY_AUDIT.md || { echo "Missing SECURITY_AUDIT.md"; exit 1; }
+          echo "✅ All GitHub Pages documentation files present and intact."
