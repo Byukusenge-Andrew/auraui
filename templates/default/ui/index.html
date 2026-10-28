@@ -3,66 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AuraUI Application</title>
-    <!-- WebUI engine script -->
-    <script src="webui.js"></script>
-    <!-- AuraUI client bridge & CSS system -->
+    <title>AuraUI Starter Application</title>
+    <!-- AuraUI CSS Design System & Client Bridge -->
     <link rel="stylesheet" href="aura.css">
     <link rel="stylesheet" href="style.css">
     <script src="aura.js"></script>
 </head>
 <body>
-    <!-- Unified App Header Bar -->
-    <header class="aura-topbar">
+    <!-- Frameless App Header / Drag Region -->
+    <header class="aura-titlebar">
         <div class="aura-brand">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                 <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
             </svg>
-            <span>AuraUI</span>
+            <span class="brand-title">AuraUI Application</span>
         </div>
         <div class="aura-topbar-actions">
-            <span class="aura-badge aura-badge-success" style="font-size: 11px;">
-                <span class="aura-dot"></span> C++ Active
+            <span class="aura-badge aura-badge-success" id="engine-badge">
+                <span class="aura-dot"></span> C++ Engine Active
             </span>
+            <div class="aura-window-controls">
+                <button class="win-btn" onclick="aura.window.minimize()" title="Minimize">🗕</button>
+                <button class="win-btn" onclick="aura.window.maximize()" title="Maximize">🗖</button>
+                <button class="win-btn win-close" onclick="aura.window.close()" title="Close">✕</button>
+            </div>
         </div>
     </header>
 
-    <!-- Main Application Shell -->
+    <!-- Main Content Container -->
     <div class="aura-app-shell">
         <main class="aura-main-content">
+            <!-- Hero Header (React / Vite Style) -->
             <div class="hero-section">
-                <h1 class="gradient-text">Welcome to AuraUI</h1>
-                <p class="subtitle">A fast, lightweight C++ desktop application with standard HTML5 and modern CSS styling.</p>
+                <div class="logo-badge">
+                    <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="url(#logo-gradient)" stroke-width="2">
+                        <defs>
+                            <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#38bdf8"/>
+                                <stop offset="50%" stop-color="#818cf8"/>
+                                <stop offset="100%" stop-color="#34d399"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <h1 class="gradient-text">AuraUI + C++20</h1>
+                <p class="subtitle">
+                    A modern desktop application powered by high-performance C++20 and standard HTML5/CSS3.
+                </p>
+                <p class="edit-hint">
+                    Edit <code>src/main.cpp</code> or <code>ui/index.html</code> and save to see changes live.
+                </p>
             </div>
 
-            <!-- Interactive C++ Calculation Card -->
-            <div class="aura-card">
-                <div class="aura-card-header">
-                    <span class="aura-card-title">Native C++ Computation</span>
-                    <span class="aura-badge aura-badge-success">
-                        <span class="aura-dot"></span> C++ Bound
-                    </span>
+            <!-- Starter Feature Cards Grid -->
+            <div class="cards-grid">
+                <!-- 1. Interactive C++ Counter -->
+                <div class="aura-card">
+                    <div class="aura-card-header">
+                        <span class="aura-card-title">⚡ Interactive C++ RPC</span>
+                        <span class="aura-badge aura-badge-primary">aura.call</span>
+                    </div>
+                    <p class="card-desc">Click to invoke native C++ backend logic in-process:</p>
+                    <div class="counter-box">
+                        <button id="btn-counter" class="aura-btn aura-btn-primary">
+                            count is <span id="counter-val">0</span>
+                        </button>
+                    </div>
+                    <p class="card-hint">Handled by <code>app.bind("counter.increment")</code> in C++.</p>
                 </div>
 
-                <div class="calc-grid">
-                    <input type="number" id="num-a" class="aura-input" value="12" placeholder="First Number">
-                    <select id="op-select" class="aura-input select-op">
-                        <option value="+">+</option>
-                        <option value="-">−</option>
-                        <option value="*">×</option>
-                        <option value="/">÷</option>
-                    </select>
-                    <input type="number" id="num-b" class="aura-input" value="30" placeholder="Second Number">
-                    <button id="btn-calc" class="aura-btn aura-btn-primary">Execute in C++</button>
+                <!-- 2. Computation & Math RPC -->
+                <div class="aura-card">
+                    <div class="aura-card-header">
+                        <span class="aura-card-title">🔢 Compute Pipeline</span>
+                        <span class="aura-badge">Typed Context</span>
+                    </div>
+                    <div class="calc-row">
+                        <input type="number" id="num-a" class="aura-input" value="15">
+                        <select id="op-select" class="aura-input select-op">
+                            <option value="+">+</option>
+                            <option value="-">−</option>
+                            <option value="*">×</option>
+                            <option value="/">÷</option>
+                        </select>
+                        <input type="number" id="num-b" class="aura-input" value="27">
+                        <button id="btn-calc" class="aura-btn aura-btn-secondary">Run</button>
+                    </div>
+                    <div class="result-banner" id="calc-result">Result: <strong>42</strong></div>
                 </div>
 
-                <div class="result-banner" id="calc-result">
-                    Result: <strong>42</strong>
+                <!-- 3. Native OS Capabilities -->
+                <div class="aura-card">
+                    <div class="aura-card-header">
+                        <span class="aura-card-title">🛡️ Native OS Modules</span>
+                        <span class="aura-badge">Powerbox</span>
+                    </div>
+                    <p class="card-desc">Zero-trust dialogs and secure system clipboard:</p>
+                    <div class="button-row">
+                        <button id="btn-open-file" class="aura-btn aura-btn-outline">Open File Dialog</button>
+                        <button id="btn-copy-link" class="aura-btn aura-btn-outline">Copy Info</button>
+                    </div>
+                    <div class="status-message" id="dialog-result">Click a button to test native OS integration</div>
                 </div>
             </div>
+
+            <!-- Quick Start Links & Documentation Footer -->
+            <footer class="hero-footer">
+                <a href="https://byukusenge-andrew.github.io/auraui/" target="_blank" class="footer-link">📖 Documentation</a>
+                <span class="separator">•</span>
+                <a href="https://github.com/Byukusenge-Andrew/auraui" target="_blank" class="footer-link">⭐ GitHub</a>
+                <span class="separator">•</span>
+                <span class="version-label">AuraUI 2.0 Standalone</span>
+            </footer>
         </main>
     </div>
 
+    <!-- Application Script -->
     <script src="app.js"></script>
 </body>
 </html>

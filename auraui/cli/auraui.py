@@ -138,6 +138,11 @@ def cmd_new(args):
     shutil.copy(FRAMEWORK_ROOT / "cli" / "aura.js", dest / "ui" / "aura.js")
     shutil.copy(FRAMEWORK_ROOT / "cli" / "aura.css", dest / "ui" / "aura.css")
 
+    # Copy root template files (README.md, dev.bat, build.bat, etc.)
+    for item in template_dir.iterdir():
+        if item.is_file() and item.name != ".gitignore":
+            shutil.copy(item, dest / item.name)
+
     # Always generate standard .gitignore for new AuraUI projects
     gitignore_src = template_dir / ".gitignore"
     if gitignore_src.exists():
@@ -231,10 +236,13 @@ Thumbs.db
     with open(dest / "auraui.json", "w", encoding="utf-8") as f:
         json.dump(config, f, indent=2)
 
-    print(f"\n[AuraUI] Successfully created AuraUI project '{project_name}'!")
+    print(f"\n[AuraUI] Successfully initialized project '{project_name}'!")
+    print("\nInside that directory, you can run several commands:")
+    print("   aura dev     # Starts the live-reloading desktop development server")
+    print("   aura build   # Compiles a standalone single-binary release executable (.exe)")
+    print("\nWe suggest that you begin by typing:")
     print(f"   cd {project_name}")
-    print("   auraui dev    # Run in live development mode")
-    print("   auraui build  # Compile standalone optimized .exe\n")
+    print("   aura dev\n")
 
 
 def cmd_bundle(args):
