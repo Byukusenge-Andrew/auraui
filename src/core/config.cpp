@@ -36,7 +36,7 @@ Result<AppConfig> ConfigLoader::parse_and_validate(std::string_view json_content
 
     // Top-level allowed keys
     static const std::unordered_set<std::string> allowed_top_keys = {
-        "version", "app", "window", "capabilities", "ipc", "dev"
+        "$schema", "version", "app", "window", "capabilities", "ipc", "dev"
     };
 
     for (auto it = j.begin(); it != j.end(); ++it) {

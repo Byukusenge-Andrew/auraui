@@ -109,6 +109,52 @@ def cmd_new(args):
     shutil.copy(FRAMEWORK_ROOT / "cli" / "aura.js", dest / "ui" / "aura.js")
     shutil.copy(FRAMEWORK_ROOT / "cli" / "aura.css", dest / "ui" / "aura.css")
 
+    # Always generate standard .gitignore for new AuraUI projects
+    gitignore_src = template_dir / ".gitignore"
+    if gitignore_src.exists():
+        shutil.copy(gitignore_src, dest / ".gitignore")
+    else:
+        with open(dest / ".gitignore", "w", encoding="utf-8") as f:
+            f.write("""# AuraUI Application .gitignore
+build/
+build_dev/
+dist/
+out/
+bin/
+src/vfs.h
+*.exe
+*.dll
+*.so
+*.dylib
+*.obj
+*.o
+*.lib
+*.a
+*.pdb
+*.ilk
+*.exp
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+Testing/
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CMakeUserPresets.json
+.vs/
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.sln
+*.suo
+.idea/
+.DS_Store
+Thumbs.db
+*.tmp
+*.log
+""")
+
     # Write project configuration
     config = {
         "name": project_name,

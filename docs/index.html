@@ -291,32 +291,34 @@ ctest --preset unit-tests</code></pre>
             <button class="btn-copy">Copy</button>
           </div>
           <pre><code>{
+  <span class="hl-str">"version"</span>: <span class="hl-num">1</span>,
   <span class="hl-str">"app"</span>: {
-    <span class="hl-str">"name"</span>: <span class="hl-str">"kredita-desktop"</span>,
-    <span class="hl-str">"version"</span>: <span class="hl-str">"2.0.0"</span>,
-    <span class="hl-str">"title"</span>: <span class="hl-str">"Kredita — Retail Ledger"</span>
+    <span class="hl-str">"id"</span>: <span class="hl-str">"com.kredita.desktop"</span>,
+    <span class="hl-str">"name"</span>: <span class="hl-str">"Kredita — Retail Ledger"</span>,
+    <span class="hl-str">"version"</span>: <span class="hl-str">"2.0.0"</span>
   },
   <span class="hl-str">"window"</span>: {
+    <span class="hl-str">"title"</span>: <span class="hl-str">"Kredita — Retail Ledger"</span>,
     <span class="hl-str">"width"</span>: <span class="hl-num">1180</span>,
     <span class="hl-str">"height"</span>: <span class="hl-num">780</span>,
     <span class="hl-str">"min_width"</span>: <span class="hl-num">900</span>,
     <span class="hl-str">"min_height"</span>: <span class="hl-num">600</span>,
-    <span class="hl-str">"frameless"</span>: <span class="hl-kw">true</span>
+    <span class="hl-str">"frameless"</span>: <span class="hl-kw">false</span>
   },
-  <span class="hl-str">"security"</span>: {
-    <span class="hl-str">"capabilities"</span>: [
-      <span class="hl-str">"window.minimize"</span>,
-      <span class="hl-str">"window.maximize"</span>,
-      <span class="hl-str">"window.close"</span>,
-      <span class="hl-str">"dialog.open"</span>,
-      <span class="hl-str">"dialog.save"</span>,
-      <span class="hl-str">"clipboard.read"</span>,
-      <span class="hl-str">"clipboard.write"</span>,
-      <span class="hl-str">"shell.open"</span>,
-      <span class="hl-str">"system.info"</span>
-    ],
+  <span class="hl-str">"capabilities"</span>: {
+    <span class="hl-str">"window.control"</span>: <span class="hl-kw">true</span>,
+    <span class="hl-str">"dialog.open"</span>: <span class="hl-kw">true</span>,
+    <span class="hl-str">"dialog.save"</span>: <span class="hl-kw">true</span>,
+    <span class="hl-str">"clipboard.read"</span>: <span class="hl-kw">true</span>,
+    <span class="hl-str">"clipboard.write"</span>: <span class="hl-kw">true</span>,
+    <span class="hl-str">"shell.open_external"</span>: <span class="hl-kw">true</span>,
+    <span class="hl-str">"system.info"</span>: <span class="hl-kw">true</span>,
+    <span class="hl-str">"store.read"</span>: <span class="hl-kw">true</span>,
+    <span class="hl-str">"store.write"</span>: <span class="hl-kw">true</span>
+  },
+  <span class="hl-str">"ipc"</span>: {
     <span class="hl-str">"rate_limit_per_sec"</span>: <span class="hl-num">100</span>,
-    <span class="hl-str">"max_payload_bytes"</span>: <span class="hl-num">1048576</span>
+    <span class="hl-str">"max_request_bytes"</span>: <span class="hl-num">1048576</span>
   }
 }</code></pre>
         </div>
