@@ -76,6 +76,27 @@ ctest --preset unit-tests
 
 ---
 
+## 🚀 Installing the CLI (`auraui` in PATH)
+
+You can add the `auraui` command to your system `PATH` so you can create and build projects from anywhere:
+
+### Option A: Windows 1-Click Installer
+Double-click or run `install.bat` in the repository root. It automatically registers `bin/` in your Windows User `PATH`.
+
+### Option B: Python Pip
+```bash
+pip install -e .
+```
+
+Once added to `PATH`, open any terminal and run:
+```bash
+auraui new my-desktop-app
+cd my-desktop-app
+auraui dev
+```
+
+---
+
 ## 🛡️ Key Architectural Pillars
 
 - **Zero-Trust Capabilities**: Deny-by-default. Every native capability (`dialog.open`, `clipboard.read`, `shell.open_url`, `fs.read_granted`) requires an explicit grant in `aura.config.json`.

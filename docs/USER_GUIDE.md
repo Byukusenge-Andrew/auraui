@@ -170,22 +170,28 @@ Available Presets:
 - `linux-gcc-debug` / `linux-gcc-release`
 - `macos-arm64-release` / `macos-universal-release`
 
-### 2. Building via the Developer CLI (`auraui.py`)
+### 2. AuraUI CLI & Adding to PATH
 
-The Python CLI wraps CMake and provides development workflow commands:
+To run the `auraui` command from any terminal or directory:
+
+- **Windows 1-Click Installer**: Run `install.bat` in the repository root. It permanently appends `bin/` to your Windows User `PATH`.
+- **Pip Install**: Run `pip install -e .` from the repository root.
+- **Manual**: Add the `bin/` directory to your system or user `PATH`.
+
+Once in `PATH`, you can use the commands directly:
 
 ```bash
 # Show CLI help
-python auraui/cli/auraui.py --help
+auraui --help
 
 # Create a new project template
-python auraui/cli/auraui.py new my-app
+auraui new my-app
 
 # Run live development mode
-python auraui/cli/auraui.py dev
+auraui dev
 
 # Compile standalone production release
-python auraui/cli/auraui.py build
+auraui build
 ```
 
 ---
