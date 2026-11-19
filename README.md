@@ -87,6 +87,7 @@ Double-click or run `install.bat` in the repository root. It automatically regis
 ```bash
 pip install -e .
 ```
+> Use an editable install (`-e`): the CLI compiles against the headers and `build/Release/auraui.lib` in this checkout, so it must stay pointed at the repository.
 
 Once added to `PATH`, open any terminal and run:
 ```bash

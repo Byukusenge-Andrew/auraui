@@ -135,7 +135,21 @@
   "testPresets": [
     {
       "name": "unit-tests",
+      "displayName": "Unit tests (Windows)",
       "configurePreset": "ci-windows",
+      "configuration": "Release",
+      "output": { "outputOnFailure": true }
+    },
+    {
+      "name": "unit-tests-linux",
+      "displayName": "Unit tests (Linux)",
+      "configurePreset": "ci-linux",
+      "output": { "outputOnFailure": true }
+    },
+    {
+      "name": "unit-tests-macos",
+      "displayName": "Unit tests (macOS)",
+      "configurePreset": "ci-macos",
       "output": { "outputOnFailure": true }
     }
   ]

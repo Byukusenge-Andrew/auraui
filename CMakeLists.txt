@@ -33,10 +33,13 @@ include(Deps)
 add_library(auraui)
 add_library(auraui::auraui ALIAS auraui)
 
-# Generate version.hpp from template
+# Generate version.hpp from template.
+# auraui.hpp uses #include "version.hpp" (resolved next to itself first), and the
+# CLI compiles straight from include/, so the header is generated in the source
+# tree. configure_file only rewrites it when VERSION changes.
 configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/include/auraui/version.hpp.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/include/auraui/version.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/auraui/version.hpp"
     @ONLY
 )
 
@@ -44,8 +47,6 @@ target_include_directories(auraui
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/auraui>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include/auraui>
         $<INSTALL_INTERFACE:include>
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src
@@ -97,7 +98,10 @@ endif()
 
 if(AURA_BUILD_EXAMPLES)
     add_subdirectory(showcase)
-    add_subdirectory(sample-app)
+    # sample-app/ is a local scratch project (gitignored); only build it when present
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/sample-app/CMakeLists.txt")
+        add_subdirectory(sample-app)
+    endif()
 endif()
 
 # Installation Rules & Export Package Config

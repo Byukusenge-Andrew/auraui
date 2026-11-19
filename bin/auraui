@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CLI_PATH="$SCRIPT_DIR/../auraui/cli/auraui.py"
+exec python3 "$CLI_PATH" "$@"

@@ -225,7 +225,7 @@ Thumbs.db
     with open(dest / "aura.config.json", "w", encoding="utf-8") as f:
         json.dump(manifest, f, indent=2)
 
-    # Legacy config backward compatibility
+    # Legacy config backward compatibility and maintenance
     config = {
         "name": project_name,
         "title": project_name.replace("-", " ").title(),

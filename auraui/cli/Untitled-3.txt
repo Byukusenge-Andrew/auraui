@@ -1,0 +1,317 @@
+///
+// expected - An implementation of std::expected with extensions
+// Written in 2017 by Sy Brand (tartanllama@gmail.com, @TartanLlama)
+//
+// Documentation available at http://tl.tartanllama.xyz/
+//
+// To the extent possible under law, the author(s) have dedicated all
+// copyright and related and neighboring rights to this software to the
+// public domain worldwide. This software is distributed without any warranty.
+//
+// You should have received a copy of the CC0 Public Domain Dedication
+// along with this software. If not, see
+// <http://creativecommons.org/publicdomain/zero/1.0/>.
+///
+
+#ifndef TL_EXPECTED_HPP
+#define TL_EXPECTED_HPP
+
+#define TL_EXPECTED_VERSION_MAJOR 1
+#define TL_EXPECTED_VERSION_MINOR 1
+#define TL_EXPECTED_VERSION_PATCH 0
+
+#include <exception>
+#include <functional>
+#include <type_traits>
+#include <utility>
+
+#if defined(__EXCEPTIONS) || defined(_CPPUNWIND)
+#define TL_EXPECTED_EXCEPTIONS_ENABLED
+#endif
+
+#if (defined(_MSC_VER) && _MSC_VER == 1900)
+#define TL_EXPECTED_MSVC2015
+#define TL_EXPECTED_MSVC2015_CONSTEXPR
+#else
+#define TL_EXPECTED_MSVC2015_CONSTEXPR constexpr
+#endif
+
+#if (defined(__GNUC__) && __GNUC__ == 4 && __GNUC_MINOR__ <= 9 &&              \
+     !defined(__clang__))
+#define TL_EXPECTED_GCC49
+#endif
+
+#if (defined(__GNUC__) && __GNUC__ == 5 && __GNUC_MINOR__ <= 4 &&              \
+     !defined(__clang__))
+#define TL_EXPECTED_GCC54
+#endif
+
+#if (defined(__GNUC__) && __GNUC__ == 5 && __GNUC_MINOR__ <= 5 &&              \
+     !defined(__clang__))
+#define TL_EXPECTED_GCC55
+#endif
+
+#if !defined(TL_ASSERT)
+//can't have assert in constexpr in C++11 and GCC 4.9 has a compiler bug
+#if (__cplusplus > 201103L) && !defined(TL_EXPECTED_GCC49)
+#include <cassert>
+#define TL_ASSERT(x) assert(x)
+#else 
+#define TL_ASSERT(x)
+#endif
+#endif
+
+#if (defined(__GNUC__) && __GNUC__ == 4 && __GNUC_MINOR__ <= 9 &&              \
+     !defined(__clang__))
+// GCC < 5 doesn't support overloading on const&& for member functions
+
+#define TL_EXPECTED_NO_CONSTRR
+// GCC < 5 doesn't support some standard C++11 type traits
+#define TL_EXPECTED_IS_TRIVIALLY_COPY_CONSTRUCTIBLE(T)                         \
+  std::has_trivial_copy_constructor<T>
+#define TL_EXPECTED_IS_TRIVIALLY_COPY_ASSIGNABLE(T)                            \
+  std::has_trivial_copy_assign<T>
+
+// This one will be different for GCC 5.7 if it's ever supported
+#define TL_EXPECTED_IS_TRIVIALLY_DESTRUCTIBLE(T)                               \
+  std::is_trivially_destructible<T>
+
+// GCC 5 < v < 8 has a bug in is_trivially_copy_constructible which breaks
+// std::vector for non-copyable types
+#elif (defined(__GNUC__) && __GNUC__ < 8 && !defined(__clang__))
+#ifndef TL_GCC_LESS_8_TRIVIALLY_COPY_CONSTRUCTIBLE_MUTEX
+#define TL_GCC_LESS_8_TRIVIALLY_COPY_CONSTRUCTIBLE_MUTEX
+namespace tl {
+namespace detail {
+template <class T>
+struct is_trivially_copy_constructible
+    : std::is_trivially_copy_constructible<T> {};
+#ifdef _GLIBCXX_VECTOR
+template <class T, class A>
+struct is_trivially_copy_constructible<std::vector<T, A>> : std::false_type {};
+#endif
+} // namespace detail
+} // namespace tl
+#endif
+
+#define TL_EXPECTED_IS_TRIVIALLY_COPY_CONSTRUCTIBLE(T)                         \
+  tl::detail::is_trivially_copy_constructible<T>
+#define TL_EXPECTED_IS_TRIVIALLY_COPY_ASSIGNABLE(T)                            \
+  std::is_trivially_copy_assignable<T>
+#define TL_EXPECTED_IS_TRIVIALLY_DESTRUCTIBLE(T)                               \
+  std::is_trivially_destructible<T>
+#else
+#define TL_EXPECTED_IS_TRIVIALLY_COPY_CONSTRUCTIBLE(T)                         \
+  std::is_trivially_copy_constructible<T>
+#define TL_EXPECTED_IS_TRIVIALLY_COPY_ASSIGNABLE(T)                            \
+  std::is_trivially_copy_assignable<T>
+#define TL_EXPECTED_IS_TRIVIALLY_DESTRUCTIBLE(T)                               \
+  std::is_trivially_destructible<T>
+#endif
+
+#if __cplusplus > 201103L
+#define TL_EXPECTED_CXX14
+#endif
+
+#ifdef TL_EXPECTED_GCC49
+#define TL_EXPECTED_GCC49_CONSTEXPR
+#else
+#define TL_EXPECTED_GCC49_CONSTEXPR constexpr
+#endif
+
+#if (__cplusplus == 201103L || defined(TL_EXPECTED_MSVC2015) ||                \
+     defined(TL_EXPECTED_GCC49))
+#define TL_EXPECTED_11_CONSTEXPR
+#else
+#define TL_EXPECTED_11_CONSTEXPR constexpr
+#endif
+
+namespace tl {
+template <class T, class E> class expected;
+
+#ifndef TL_MONOSTATE_INPLACE_MUTEX
+#define TL_MONOSTATE_INPLACE_MUTEX
+class monostate {};
+
+struct in_place_t {
+  explicit in_place_t() = default;
+};
+static constexpr in_place_t in_place{};
+#endif
+
+template <class E> class unexpected {
+public:
+  static_assert(!std::is_same<E, void>::value, "E must not be void");
+
+  unexpected() = delete;
+  constexpr explicit unexpected(const E &e) : m_val(e) {}
+
+  constexpr explicit unexpected(E &&e) : m_val(std::move(e)) {}
+
+  template <class... Args, typename std::enable_if<std::is_constructible<
+                               E, Args &&...>::value>::type * = nullptr>
+  constexpr explicit unexpected(Args &&...args)
+      : m_val(std::forward<Args>(args)...) {}
+  template <
+      class U, class... Args,
+      typename std::enable_if<std::is_constructible<
+          E, std::initializer_list<U> &, Args &&...>::value>::type * = nullptr>
+  constexpr explicit unexpected(std::initializer_list<U> l, Args &&...args)
+      : m_val(l, std::forward<Args>(args)...) {}
+
+  constexpr const E &value() const & { return m_val; }
+  TL_EXPECTED_11_CONSTEXPR E &value() & { return m_val; }
+  TL_EXPECTED_11_CONSTEXPR E &&value() && { return std::move(m_val); }
+  constexpr const E &&value() const && { return std::move(m_val); }
+
+private:
+  E m_val;
+};
+
+#ifdef __cpp_deduction_guides
+template <class E> unexpected(E) -> unexpected<E>;
+#endif
+
+template <class E>
+constexpr bool operator==(const unexpected<E> &lhs, const unexpected<E> &rhs) {
+  return lhs.value() == rhs.value();
+}
+template <class E>
+constexpr bool operator!=(const unexpected<E> &lhs, const unexpected<E> &rhs) {
+  return lhs.value() != rhs.value();
+}
+template <class E>
+constexpr bool operator<(const unexpected<E> &lhs, const unexpected<E> &rhs) {
+  return lhs.value() < rhs.value();
+}
+template <class E>
+constexpr bool operator<=(const unexpected<E> &lhs, const unexpected<E> &rhs) {
+  return lhs.value() <= rhs.value();
+}
+template <class E>
+constexpr bool operator>(const unexpected<E> &lhs, const unexpected<E> &rhs) {
+  return lhs.value() > rhs.value();
+}
+template <class E>
+constexpr bool operator>=(const unexpected<E> &lhs, const unexpected<E> &rhs) {
+  return lhs.value() >= rhs.value();
+}
+
+template <class E>
+unexpected<typename std::decay<E>::type> make_unexpected(E &&e) {
+  return unexpected<typename std::decay<E>::type>(std::forward<E>(e));
+}
+
+struct unexpect_t {
+  unexpect_t() = default;
+};
+static constexpr unexpect_t unexpect{};
+
+namespace detail {
+template <typename E>
+[[noreturn]] TL_EXPECTED_11_CONSTEXPR void throw_exception(E &&e) {
+#ifdef TL_EXPECTED_EXCEPTIONS_ENABLED
+  throw std::forward<E>(e);
+#else
+  (void)e;
+#ifdef _MSC_VER
+  __assume(0);
+#else
+  __builtin_unreachable();
+#endif
+#endif
+}
+
+#ifndef TL_TRAITS_MUTEX
+#define TL_TRAITS_MUTEX
+// C++14-style aliases for brevity
+template <class T> using remove_const_t = typename std::remove_const<T>::type;
+template <class T>
+using remove_reference_t = typename std::remove_reference<T>::type;
+template <class T> using decay_t = typename std::decay<T>::type;
+template <bool E, class T = void>
+using enable_if_t = typename std::enable_if<E, T>::type;
+template <bool B, class T, class F>
+using conditional_t = typename std::conditional<B, T, F>::type;
+
+// std::conjunction from C++17
+template <class...> struct conjunction : std::true_type {};
+template <class B> struct conjunction<B> : B {};
+template <class B, class... Bs>
+struct conjunction<B, Bs...>
+    : std::conditional<bool(B::value), conjunction<Bs...>, B>::type {};
+
+#if defined(_LIBCPP_VERSION) && __cplusplus == 201103L
+#define TL_TRAITS_LIBCXX_MEM_FN_WORKAROUND
+#endif
+
+// In C++11 mode, there's an issue in libc++'s std::mem_fn
+// which results in a hard-error when using it in a noexcept expression
+// in some cases. This is a check to workaround the common failing case.
+#ifdef TL_TRAITS_LIBCXX_MEM_FN_WORKAROUND
+template <class T>
+struct is_pointer_to_non_const_member_func : std::false_type {};
+template <class T, class Ret, class... Args>
+struct is_pointer_to_non_const_member_func<Ret (T::*)(Args...)>
+    : std::true_type {};
+template <class T, class Ret, class... Args>
+struct is_pointer_to_non_const_member_func<Ret (T::*)(Args...) &>
+    : std::true_type {};
+template <class T, class Ret, class... Args>
+struct is_pointer_to_non_const_member_func<Ret (T::*)(Args...) &&>
+    : std::true_type {};
+template <class T, class Ret, class... Args>
+struct is_pointer_to_non_const_member_func<Ret (T::*)(Args...) volatile>
+    : std::true_type {};
+template <class T, class Ret, class... Args>
+struct is_pointer_to_non_const_member_func<Ret (T::*)(Args...) volatile &>
+    : std::true_type {};
+template <class T, class Ret, class... Args>
+struct is_pointer_to_non_const_member_func<Ret (T::*)(Args...) volatile &&>
+    : std::true_type {};
+
+template <class T> struct is_const_or_const_ref : std::false_type {};
+template <class T> struct is_const_or_const_ref<T const &> : std::true_type {};
+template <class T> struct is_const_or_const_ref<T const> : std::true_type {};
+#endif
+
+// std::invoke from C++17
+// https://stackoverflow.com/questions/38288042/c11-14-invoke-workaround
+template <
+    typename Fn, typename... Args,
+#ifdef TL_TRAITS_LIBCXX_MEM_FN_WORKAROUND
+    typename = enable_if_t<!(is_pointer_to_non_const_member_func<Fn>::value &&
+                             is_const_or_const_ref<Args...>::value)>,
+#endif
+    typename = enable_if_t<std::is_member_pointer<decay_t<Fn>>::value>, int = 0>
+constexpr auto invoke(Fn &&f, Args &&...args) noexcept(
+    noexcept(std::mem_fn(f)(std::forward<Args>(args)...)))
+    -> decltype(std::mem_fn(f)(std::forward<Args>(args)...)) {
+  return std::mem_fn(f)(std::forward<Args>(args)...);
+}
+
+template <typename Fn, typename... Args,
+          typename = enable_if_t<!std::is_member_pointer<decay_t<Fn>>::value>>
+constexpr auto invoke(Fn &&f, Args &&...args) noexcept(
+    noexcept(std::forward<Fn>(f)(std::forward<Args>(args)...)))
+    -> decltype(std::forward<Fn>(f)(std::forward<Args>(args)...)) {
+  return std::forward<Fn>(f)(std::forward<Args>(args)...);
+}
+
+// std::invoke_result from C++17
+template <class F, class, class... Us> struct invoke_result_impl;
+
+template <class F, class... Us>
+struct invoke_result_impl<
+    F,
+    decltype(detail::invoke(std::declval<F>(), std::declval<Us>()...), void()),
+    Us...> {
+  using type =
+      decltype(detail::invoke(std::declval<F>(), std::declval<Us>()...));
+};
+
+template <class F, class... Us>
+using invoke_result = invoke_result_impl<F, void, Us...>;
+
+template <class F, class... Us>
+using invoke_resul

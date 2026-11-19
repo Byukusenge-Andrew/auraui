@@ -36,12 +36,15 @@ jobs:
         include:
           - os: windows-latest
             preset: ci-windows
+            test_preset: unit-tests
             config: Release
           - os: ubuntu-latest
             preset: ci-linux
+            test_preset: unit-tests-linux
             config: Release
           - os: macos-latest
             preset: ci-macos
+            test_preset: unit-tests-macos
             config: Release
 
     steps:
@@ -68,11 +71,11 @@ jobs:
 
       - name: Run Tests (Windows / macOS)
         if: runner.os != 'Linux'
-        run: ctest --preset unit-tests
+        run: ctest --preset ${{ matrix.test_preset }}
 
       - name: Run Tests (Linux xvfb)
         if: runner.os == 'Linux'
-        run: xvfb-run --auto-servernum ctest --preset unit-tests
+        run: xvfb-run --auto-servernum ctest --preset ${{ matrix.test_preset }}
 
   sanitizers:
     name: Sanitizers (Linux Clang ASan + UBSan)

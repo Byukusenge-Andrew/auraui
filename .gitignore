@@ -4,7 +4,13 @@ build-*/
 cmake-build-*/
 out/
 dist/
-bin/
+# bin/ holds the tracked CLI launcher scripts (see install.bat); only ignore build output there
+bin/*
+!bin/auraui
+!bin/auraui.cmd
+!bin/auraui.ps1
+!bin/aura.cmd
+!bin/aura.ps1
 
 # CMake artifacts & user presets
 CMakeUserPresets.json
@@ -74,5 +80,3 @@ desktop.ini
 sample-app/
 ci-*/
 tmp/
-vendor/webui
-vendor/webui
